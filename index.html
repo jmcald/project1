@@ -1,14 +1,14 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en-us">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Animal Scouter</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-        crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
         crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 </head>
@@ -16,31 +16,25 @@
 <body>
 
     <div class="jumbotron bg-success">
-        <h1 class="text-center text-light">Creature Catalog</h1>
+        <h1 class="text-center text-light">Animal Scouter</h1>
         <hr class="bg-light col-lg-6">
-        <h3 class="text-center text-light">See What You'll Encounter On Your Next Adventure</h3>
+        <h3 class="text-center text-light">Gather Your Resources Before Your Adventure Begins</h3>
     </div>
 
     <div class="row">
         <div class="card col-md-6">
             <h3 class="text-center">My Trip</h3>
             <hr>
-            <div id="destination-id">
-                <form class="col-md-6">
-                    <div class="form-group">
-                        <label for="destination">What is your destination?</label>
-                        <input type="text" class="form-control" id="destination" aria-describedby="destinationHelp">
-                    </div>
-                    <div class="form-group">
-                        <label for="start-date">What is the first day of your visit?</label>
-                        <input type="date" class="form-control" id="start-date" aria-describedby="startDateHelp">
-                    </div>
-                    <div class="form-group">
-                        <label for="date-range-end">What is the last day of your visit?</label>
-                        <input type="date" class="form-control" id="date-range-end" aria-describedby="endDateHelp">
-                    </div>
-                    <button type="submit" class="btn btn-success" id="btn-submit">Submit</button>
-                </form>
+            <div class="btn-group dropright">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                    Your Destination
+                </button>
+            </div>
+            <br>
+            <div id="date-range">
+                <h4></h4>When are you visiting?
+                <!-- Use Moment.js -->
             </div>
 
             <div id="animal-results"></div>
