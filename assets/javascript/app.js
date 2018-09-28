@@ -11,7 +11,7 @@ var dumStartDate = "06/25/2018";
 var dumEndDate = "08/04/2018";
 
 // getting trip info from dom
-var location = $("#destination").val().trim();
+
 var startDate;
 var endDate;
 
@@ -28,17 +28,17 @@ var returnDays = (startD, endD) => {
 
 };
 
-var returnMonths = (startD, endD) => {
-    var sMonth = moment(startD);
-    var eMonth = moment(endD);
+var returnMonths = (startM, endM) => {
+    var sMonth = moment(startM);
+    var eMonth = moment(endM);
 
     while (sMonth <= eMonth) {
         var month = moment(sMonth).format("M");
         months.push(month);
         sMonth = moment(sMonth).add(1, "M");
-        console.log(sMonth);
+        console.log("sMonth", sMonth);
     }
-    console.log(months);
+    console.log("months", months);
 
 };
 returnDays(dumStartDate, dumEndDate);
@@ -66,6 +66,8 @@ function iNatAPI() {
 $(document).ready(function () {
     $("#btn-submit").on("click", function (event) {
         event.preventDefault();
+        var location = $("#destination").val().trim();
+        console.log("location", location);
     });
 });
 // jQuery plugin for the date range found here "http://www.daterangepicker.com/"
@@ -77,6 +79,6 @@ $(function () {
     }, function (start, end, label) {
         startDate = start.format('MM-DD-YYYY');
         endDate = end.format('MM-DD-YYYY');
-        
+
     });
 });
