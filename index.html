@@ -5,7 +5,13 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Animal Scouter</title>
+        <title>Creature Catalog</title>
+
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="assets/css/style.css">
@@ -14,26 +20,29 @@
     <body>
 
         <div class="jumbotron bg-success">
-            <h1 class="text-center text-light">Animal Scouter</h1>
+            <h1 class="text-center text-light">Creature Catalog</h1>
             <hr class="bg-light col-lg-6">
-            <h3 class="text-center text-light">Gather Your Resources Before Your Adventure Begins</h3>
+            <h3 class="text-center text-light">See What You'll Encounter On Your Next Adventure</h3>
         </div>
 
         <div class="row">
             <div class="card col-md-6">
                 <h3 class="text-center">My Trip</h3>
                 <hr>
-                <div class="btn-group dropright">
-                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Your Destination
-                    </button>
+                <div id="destination">
+                    <form class="col-md-6">
+                        <div class="form-group">
+                            <label for="destination">What is your destination?</label>
+                            <input type="text" class="form-control" id="destination" aria-describedby="destinationHelp">
+                        </div>
+                        <div class="form-group">
+                            <label for="date-range">When will your trip take place?</label>
+                            <input type="text" name="daterange" value="">
+                        </div>
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </form>
                 </div>
-                <br>
-                <div id="date-range">
-                    <h4></h4>When are you visiting?
-                    <!-- Use Moment.js -->
-                </div>
-                
+
                 <div id="animal-results"></div>
                 <!-- This will be the checklist of animals returned from the iNaturalist API / Limit 15 -->
                 <div id="new-search"></div>
@@ -51,9 +60,6 @@
             </div>
         </div>
 
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script type="text/javascript" src="assets/javascript/app.js"></script>
-
     </body>
 </html>
