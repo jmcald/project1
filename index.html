@@ -6,6 +6,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Creature Catalog</title>
+
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="assets/css/style.css">
@@ -30,17 +36,13 @@
                             <input type="text" class="form-control" id="destination" aria-describedby="destinationHelp">
                         </div>
                         <div class="form-group">
-                            <label for="startDate">What is the first day of your visit?</label>
-                            <input type="date" class="form-control" id="start-date" aria-describedby="startDateHelp">
-                        </div>
-                        <div class="form-group">
-                            <label for="endDate">What is the last day of your visit?</label>
-                            <input type="date" class="form-control" id="date-range-end" aria-describedby="endDateHelp">
+                            <label for="date-range">When will your trip take place?</label>
+                            <input type="text" name="daterange" value="">
                         </div>
                         <button type="submit" class="btn btn-success">Submit</button>
                     </form>
                 </div>
-                
+
                 <div id="animal-results"></div>
                 <!-- This will be the checklist of animals returned from the iNaturalist API / Limit 15 -->
                 <div id="new-search"></div>
@@ -58,9 +60,6 @@
             </div>
         </div>
 
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script type="text/javascript" src="assets/javascript/app.js"></script>
-
     </body>
 </html>
