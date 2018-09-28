@@ -13,13 +13,45 @@ var dumStartDate = "06/25/2018";
 var dumEndDate = "07/04/2018";
 
 // getting trip info from dom
-var location = $("#destination").val().trim();
-var startDate = $("#start-date").val().trim();
-var endDate = $("#date-range-end").val().trim();
+// var location = $("#destination").val().trim();
+// var startDate = $("#start-date").val().trim();
+// var endDate = $("#date-range-end").val().trim();
 
-var returnDates = (startD, endD) => {
-
+var returnDays = (startD, endD) => {
+    var sDate = moment(startD);
+    var eDate = moment(endD);
+    
+    while (sDate <= eDate) {
+       var day =  moment(sDate).format("D");
+       days.push(day);
+       sDate = moment(sDate).add(1, "d");
+       console.log(days);
+    }  
+    
 };
+var returnMonths = (startD, endD) => {
+    var sDate = moment(startD);
+    var eDate = moment(endD);
+    
+    while (sDate <= eDate) {
+       var month =  moment(sDate).format("M");
+       months.push(month);
+       sDate = moment(sDate).add(1, "m");
+       console.log(months);
+    }  
+    
+};
+returnDays(dumStartDate, dumEndDate);
+returnMonths(dumStartDate, dumEndDate);
+
+
+
+
+
+
+
+
+
 
 
 
