@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 var iNATURAL_query_url = "https://api.inaturalist.org/v1/observations/species_counts?photos=true&popular=true&verifiable=true&day=30%2C31%2C01%2C02&month=05%2C06";
 
 
@@ -6,17 +5,15 @@ var iNATURAL_query_url = "https://api.inaturalist.org/v1/observations/species_co
 // Query Parameters
 var days = [];
 var months = [];
-var popular = true;
-var photos = true;
-var verifiable = true;
+
 
 var dumStartDate = "06/25/2018";
 var dumEndDate = "08/04/2018";
 
 // getting trip info from dom
-// var location = $("#destination").val().trim();
-// var startDate = $("#start-date").val().trim();
-// var endDate = $("#date-range-end").val().trim();
+var location = $("#destination").val().trim();
+var startDate;
+var endDate;
 
 var returnDays = (startD, endD) => {
     var sDate = moment(startD);
@@ -30,6 +27,7 @@ var returnDays = (startD, endD) => {
     console.log(days);
 
 };
+
 var returnMonths = (startD, endD) => {
     var sMonth = moment(startD);
     var eMonth = moment(endD);
@@ -47,17 +45,11 @@ returnDays(dumStartDate, dumEndDate);
 returnMonths(dumStartDate, dumEndDate);
 
 
+var popular = true;
+var photos = true;
+var verifiable = true;
 
-
-
-
-
-
-
-
-
-
-function calliNatAPI() {
+function iNatAPI() {
     $.ajax({
         url: "https://api.inaturalist.org/v1/observations/species_counts?photos=true&popular=true&verifiable=true&day=30%2C31%2C01%2C02&month=05%2C06",
         method: "GET"
@@ -76,15 +68,15 @@ $(document).ready(function () {
         event.preventDefault();
     });
 });
-=======
 // jQuery plugin for the date range found here "http://www.daterangepicker.com/"
 $('input[name="dates"]').daterangepicker();
 
-$(function() {
+$(function () {
     $('input[name="daterange"').daterangepicker({
         opens: 'left'
-    }, function(start, end, label) {
-        console.log("Date ranger selected by user was from: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+    }, function (start, end, label) {
+        startDate = start.format('MM-DD-YYYY');
+        endDate = end.format('MM-DD-YYYY');
+        
     });
 });
->>>>>>> master
