@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 var iNATURAL_query_url = "https://api.inaturalist.org/v1/observations/species_counts?photos=true&popular=true&verifiable=true&day=30%2C31%2C01%2C02&month=05%2C06";
 
 
@@ -75,3 +76,15 @@ $(document).ready(function () {
         event.preventDefault();
     });
 });
+=======
+// jQuery plugin for the date range found here "http://www.daterangepicker.com/"
+$('input[name="dates"]').daterangepicker();
+
+$(function() {
+    $('input[name="daterange"').daterangepicker({
+        opens: 'left'
+    }, function(start, end, label) {
+        console.log("Date ranger selected by user was from: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+    });
+});
+>>>>>>> master
