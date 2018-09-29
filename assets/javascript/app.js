@@ -11,8 +11,7 @@ var trip = {
 // Very long array of Nation Parks and their IDs. 
 //We would have liked to get this from an API, but the NPS api did not provide this. 
 var destinationArr = [
-    {
-        parkID: "ACAD",
+    {   parkID: "ACAD",
         name: "Acadia National Park"
     }, {
         parkID: "ARCH",
@@ -262,6 +261,9 @@ $(document).ready(function () {
         trip.destination = $("#destination").val().trim();
         console.log("trip.destination", trip.destination);
     });
+
+});
+
 
 });
 
