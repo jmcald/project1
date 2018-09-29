@@ -12,191 +12,26 @@ var trip = {
 //We would have liked to get this from an API, but the NPS api did not provide this. 
 var destinationArr = [
     {
-        parkID: "ABLI",
-        name: "Abraham Lincoln Birthplace National Historical Park"
-    }, {
         parkID: "ACAD",
         name: "Acadia National Park"
-    }, {
-        parkID: "ADAM",
-        name: "Adams National Historical Park"
-    }, {
-        parkID: "ADNM",
-        name: "Adams National Monument"
-    }, {
-        parkID: "AFAM",
-        name: "African American Civil War Memorial National Memorial"
-    }, {
-        parkID: "AFBG",
-        name: "African Burial Ground National Monument"
-    }, {
-        parkID: "AGFO",
-        name: "Agate Fossil Beds National Monument"
-    }, {
-        parkID: "ALAG",
-        name: "Alagnak Wild River National Wild And Scenic River"
-    }, {
-        parkID: "ALCA",
-        name: "ALcatraz Island"
-    }, {
-        parkID: "ALEU",
-        name: "Aleutian World War II National HIstoric Area"
-    }, {
-        parkID: "ALFL",
-        name: "Alibates Flint Quarries National Monument"
-    }, {
-        parkID: "ALPO",
-        name: "Allegheny Portage Railroad National Historic Site"
-    }, {
-        parkID: "AMIS",
-        name: "Amistad National Recreation Area"
-    }, {
-        parkID: "ANAC",
-        name: "Anacostia Park"
-    }, {
-        parkID: "ANDE",
-        name: "Andersonville Natinla Historic Site"
-    }, {
-        parkID: "ANIA",
-        name: "Aniakchak National Monument and Preserve"
-    }, {
-        parkID: "ANJO",
-        name: "Andrew Johnson National Historic Site"
-    }, {
-        parkID: "ANTI",
-        name: "Antietam National Battlefield"
-    }, {
-        parkID: "APCO",
-        name: "Appomattox Court House National Historical Park"
-    }, {
-        parkID: "APIS",
-        name: "Apostle Islands National Lakeshore"
-    }, {
-        parkID: "APPA",
-        name: "Appalachian National Scenic Trail"
     }, {
         parkID: "ARCH",
         name: "Arches National Park"
     }, {
-        parkID: "ARHO",
-        name: "Arlington House The Robert E. Lee Memorial"
-    }, {
-        parkID: "ARPO",
-        name: "Arkansas Post National Memorial"
-    }, {
-        parkID: "ASIS",
-        name: "Assateague Island National Seashore"
-    }, {
-        parkID: "AZRU",
-        name: "Aztec Ruins National Monument"
-    }, {
         parkID: "BADL",
         name: "Badlands National Park"
     }, {
-        parkID: "BAND",
-        name: "Bandelier National Monument"
-    }, {
-        parkID: "BAWA",
-        name: "Baltimore-Washington National Parkway"
-    }, {
-        parkID: "BELA",
-        name: "Bering Land Bridge National Preserve"
-    }, {
-        parkID: "BEOL",
-        name: "Bent's Old Fort National Historic Site"
-    }, {
-        parkID: "BEPA",
-        name: "Bear Paw Battlefield"
-    }, {
         parkID: "BIBE",
-        name: "Big BEnd National Park"
-    }, {
-        parkID: "BICA",
-        name: "Bighorn Canyon National Recreation Area"
-    }, {
-        parkID: "BICY",
-        name: "Big Cypress National Preserve"
-    }, {
-        parkID: "BIHO",
-        name: "Big Hole National Battlefield"
+        name: "Big Bend National Park"
     }, {
         parkID: "BISC",
         name: "Biscayne National Park"
     }, {
-        parkID: "BISO",
-        name: "Big South Fork National River and Recreation Area National River"
-    }, {
-        parkID: "BITH",
-        name: "Big Thicket National Preserve"
-    }, {
         parkID: "BLCA",
         name: "Black Canyon Of The Gunnison National Park"
     }, {
-        parkID: "BLRI",
-        name: "Blue Ridge Parkway"
-    }, {
-        parkID: "BLUE",
-        name: "Bluestone National Scenic River National Wild And Scenic River"
-    }, {
-        parkID: "BOAF",
-        name: "Boston African American National Historic Site"
-    }, {
-        parkID: "BOHA",
-        name: "Boston Harbor Islands National Recreation Area"
-    }, {
-        parkID: "BOST",
-        name: "Boston National Historical Park"
-    }, {
-        parkID: "BOWA",
-        name: "Booker T. Washington National Monument"
-    }, {
         parkID: "BRCA",
         name: "Bryce Canyon National Park"
-    }, {
-        parkID: "BRCR",
-        name: "Brices Cross Roads National Battlefield Site"
-    }, {
-        parkID: "BRVB",
-        name: "Brown v. Board Of Education National Historic Site"
-    }, {
-        parkID: "BUFF",
-        name: "Buffalo National River"
-    }, {
-        parkID: "BUIS",
-        name: "Buck Island Reef National Monument"
-    }, {
-        parkID: "CABR",
-        name: "Cabrillo National Monument"
-    }, {
-        parkID: "CACH",
-        name: "Canyon De Chelly National Monument"
-    }, {
-        parkID: "CACL",
-        name: "Castle Clinton National Monument"
-    }, {
-        parkID: "CACO",
-        name: "Cape Cod National Seashore"
-    }, {
-        parkID: "CAGR",
-        name: "Casa Grande Ruins National Monument"
-    }, {
-        parkID: "CAHA",
-        name: "Cape Hatteras National Seashore"
-    }, {
-        parkID: "CAHE",
-        name: "Capitol Hill Parks"
-    }, {
-        parkID: "CAKR",
-        name: "Cape Krusenstern National Monument"
-    }, {
-        parkID: "CALO",
-        name: "Cape Lookout National Seashore"
-    }, {
-        parkID: "CAME",
-        name: "Cape Henry National Memorial"
-    }, {
-        parkID: "CANA",
-        name: "Canaveral National Seashore"
     }, {
         parkID: "CANY",
         name: "Canyonlands National Park"
@@ -204,21 +39,153 @@ var destinationArr = [
         parkID: "CARE",
         name: "Capitol Reef National Park"
     }, {
-        parkID: "CARI",
-        name: "Cane River Creole National Historical Site"
-    }, {
-        parkID: "CARL",
-        name: "Carl Sandburg Home National Historic Site"
-    }, {
-        parkID: "CASA",
-        name: "Castillo De San Marcos National Monument"
-    }, {
-        parkID: "CATO",
-        name: "Catocin Mountain Park"
-    }, {
         parkID: "CAVE",
         name: "Carlsbad Caverns National Park"
-    },
+    }, {
+        parkID: "CHIS",
+        name: "Channel Islands National Park"
+    }, {
+        parkID: "CONG",
+        name: "Congaree National Park"
+    }, {
+        parkID: "CRLA",
+        name: "Crater Lake National Park"
+    }, {
+        parkID: "CUVA",
+        name: "Cyahoga Valley National Park"
+    }, {
+        parkID: "DENA",
+        name: "Denali National Park and Preserve"
+    }, {
+        parkID: "DEVA",
+        name: "Death Valley National Park"
+    }, {
+        parkID: "DRTO",
+        name: "Dry Tortugas National Park"
+    }, {
+        parkID: "EVER",
+        name: "Everglades National Park"
+    }, {
+        parkID: "GAAR",
+        name: "Gates Of The Arctic National Park and Preserve"
+    }, {
+        parkID: "GLAC",
+        name: "Glacier National Park"
+    }, {
+        parkID: "GLBA",
+        name: "Glacier Bay National Park and Preserve"
+    }, {
+        parkID: "GRBA",
+        name: "Great Basin National Park"
+    }, {
+        parkID: "GRCA",
+        name: "Grand Canyon National Park"
+    }, {
+        parkID: "GRSA",
+        name: "Great Sand Dunes National Park and Preserve"
+    }, {
+        parkID: "GRSM",
+        name: "Great Smoky Mountain National Park"
+    }, {
+        parkID: "GRTE",
+        name: "Grand Teton National Park"
+    }, {
+        parkID: "GUMO",
+        name: "Guadalupe Mountains National Park"
+    }, {
+        parkID: "HALE",
+        name: "Haleakala National Park"
+    }, {
+        parkID: "HAVO",
+        name: "Hawaii Volcanoes National Park"
+    }, {
+        parkID: "HOSP",
+        name: "Hot Springs National Park"
+    }, {
+        parkID: "ISRO",
+        name: "Isle Royale National Park"
+    }, {
+        parkID: "JOTR",
+        name: "Joshua Tree National Park"
+    }, {
+        parkID: "KATM",
+        name: "Katmai National Park and Preserve"
+    }, {
+        parkID: "KEFJ",
+        name: "Kenai Fjords National Park"
+    }, {
+        parkID: "KICA",
+        name: "Kings Canyon National Park"
+    }, {
+        parkID: "KOVA",
+        name: "Kobuk Valley National Park"
+    }, {
+        parkID: "LACL",
+        name: "Lake Clark National Park and Preserve"
+    }, {
+        parkID: "LAVO",
+        name: "Lassen Volcanic National Park"
+    }, {
+        parkID: "MACA",
+        name: "Mammoth Cave National Park"
+    }, {
+        parkID: "MEVE",
+        name: "Mesa Verde National Park"
+    }, {
+        parkID: "MORA",
+        name: "Mount Rainier National Park"
+    }, {
+        parkID: "NOCA",
+        name: "North Cascades National Park"
+    }, {
+        parkID: "NPSA",
+        name: "National Park of American Samoa National Park"
+    }, {
+        parkID: "OLYM",
+        name: "Olympic National Park"
+    }, {
+        parkID: "PEFO",
+        name: "Petrified Forest National Park"
+    }, {
+        parkID: "REDW",
+        name: "Redwood National Park"
+    }, {
+        parkID: "ROMO",
+        name: "Rocky Mountain National Park"
+    }, {
+        parkID: "SAGU",
+        name: "Saguaro National Park"
+    }, {
+        parkID: "SEKI",
+        name: "Sequoia and Kings Canyon National Parks"
+    }, {
+        parkID: "SEQU",
+        name: "Sequoia National Park"
+    }, {
+        parkID: "SHEN",
+        name: "Shenandoah National Park"
+    }, {
+        parkID: "THRO",
+        name: "Theodore Roosevelt National Park"
+    }, {
+        parkID: "VOYA",
+        name: "Voyageurs National Park"
+    }, {
+        parkID: "WICA",
+        name: "Wind Cave National Park"
+    }, {
+        parkID: "WRST",
+        name: "Wrangell - St Elias National Park and Service"
+    }, {
+        parkID: "YELL",
+        name: "Yellowstone National Park"
+    }, {
+        parkID: "YOSE",
+        name: "Yosemite National Park"
+    }, {
+        parkID: "ZION",
+        name: "Zion National Park"
+    }
 ];
 
 
@@ -297,7 +264,6 @@ $(document).ready(function () {
     });
 
 });
-
 
 var getDates = () => {
 
