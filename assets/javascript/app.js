@@ -1,6 +1,13 @@
-var iNATURAL_query_url = "https://api.inaturalist.org/v1/observations/species_counts?photos=true&popular=true&verifiable=true&day=30%2C31%2C01%2C02&month=05%2C06";
-
-
+var config = {
+    apiKey: "AIzaSyDUabdQvO-s8kMblw1APXzvCIDwJ5A9Iyc",
+    authDomain: "project1-c9ffe.firebaseapp.com",
+    databaseURL: "https://project1-c9ffe.firebaseio.com",
+    projectId: "project1-c9ffe",
+    storageBucket: "project1-c9ffe.appspot.com",
+    messagingSenderId: "1032611962994"
+};
+firebase.initializeApp(config);
+var database = firebase.database();
 // get information back from the inaturalist api
 // Query Parameters
 var trip = {
@@ -249,18 +256,17 @@ var returnMonths = (startM, endM) => {
 
 };
 
-var popular = true;
-var photos = true;
-var verifiable = true;
 
 function iNatAPI(trip) {
-
+    var popular = true;
+    var photos = true;
+    var verifiable = true;
     var daysString = returnDays(trip.startDate, trip.endDate);
     var monthString = returnMonths(trip.startDate, trip.endDate);
     // added the .replace function to make sure the entire trip.destination string was included in the query.
     var local = trip.destination.replace(/\s+/g, '%20');
     var responNum = 25;
-    var queryURL = `https://api.inaturalist.org/v1/observations/species_counts?photos=true&popular=true&verifiable=true&day=${daysString}&month=${monthString}&local=${local}&per_page=${responNum}`
+    var queryURL = `https://api.inaturalist.org/v1/observations/species_counts?photos=${photos}&popular=${popular}&verifiable=${verifiable}&day=${daysString}&month=${monthString}&local=${local}&per_page=${responNum}`
     console.log(queryURL);
     $.ajax({
         url: queryURL,
@@ -268,18 +274,42 @@ function iNatAPI(trip) {
     }).then(function (response) {
         var res = response.results;
         for (var i = 0; i < res.length; i++) {
-            var name = res[i].taxon.preferred_common_name;
-            var imgURL = res[i].taxon.default_photo.medium_url;
-            var wikiLink = res[i].taxon.wikipedia_url;
-            console.log([name, imgURL, wikiLink]);
+            var animalObj = {
+                name: res[i].taxon.preferred_common_name,
+                taxonName: res[i].taxon.name,
+                imgURL: res[i].taxon.default_photo.medium_url,
+                wikiLink: res[i].taxon.wikipedia_url,
+            };
+            // var name = res[i].taxon.preferred_common_name;
+            // var taxonName = res[i].taxon.name;
+            // var imgURL = res[i].taxon.default_photo.medium_url;
+            // var wikiLink = res[i].taxon.wikipedia_url;
+            console.log(animalObj);
+            pushAnimalList(animalObj);
         }
     });
 }
 
+function createAnimalList(obj) {
+
+}
+
+function pushAnimalList(obj) {
+    database.ref("animal-list").push({
+        name: obj.name,
+        taxonName: obj.taxonName,
+        imgURL: obj.imgURL,
+        wikiLink: obj.wikiLink,
+        dataAdded: firebase.database.ServerValue.TIMESTAMP
+    });
+}
+
+
+
 
 $(document).ready(function () {
     populateDestinations(destinationArr);
-    
+
     $(document).on("click", ".dropdown-item", function () {
         trip.destination = $(this).attr("park-name");
         console.log(trip.destination);
