@@ -28,43 +28,45 @@
         </div>
 
         <div class="row">
-            <div class="card col-md-6">
-                <h2 class="text-center">My Trip</h2>
+            <div class="card col-lg-6 col-md-6 col-sm-12">
+                <h2 class="text-center"><i class="fas fa-tree"></i> My Trip <i class="fas fa-tree"></i></h2>
                 <hr>
                 <div id="destination">
-                    <form class="col-md-6">
+                    <form class="col-lg-6 col-md-6 col-sm-12">
                         <div class="form-group">
-                            <label for="date-range">When will your trip take place?</label>
-                            <input id="calendar" type="text" name="daterange" value="">
+                            <label for="date-range"><i class="fas fa-calendar-alt"></i> When will your trip take place?</label>
+                            <input class="rounded" id="calendar" type="text" name="daterange" value="" title="Set a date-range for your trip.">
                         </div>
-                        <div class="btn-group">
-                                <button type="button" class="btn btn-success">What is your destination?</button>
-                                <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                  <span class="sr-only">Toggle Dropdown</span>
-                                </button>
-                                <div class="dropdown-menu">
-                                  <a class="dropdown-item" id="national-parks"></a>
-                                </div>
+                        <div class="dropdown">
+                            <label for="park-dropdown"><i class="fas fa-globe-americas"></i> What is your destination?</label>
+                            <button class="btn btn-success dropdown-toggle" type="button" title="Choose between 58 National Parks.">National Parks</button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="park-dropdown">
+                                <a class="dropdown-item" id="national-parks"></a>
+                            </div>
                         </div>
-                        <br>
-                        <button type="submit" class="btn btn-success">Submit</button>
+                        <button type="button" class="btn btn-success" title="Submit to start your adventure!">Submit</button>
+                        <div class="alert alert-success col-lg-12" role="alert">Please fill out both 'Date' and 'Destination' fields to start your adventure!</div>
                     </form>
                 </div>
 
-                <div id="animal-results"></div>
-                <!-- This will be the checklist of animals returned from the iNaturalist API / Limit 15 -->
-                <div id="new-search"></div>
-                <!-- This will be a button saving a user's finished trip and starting a new one -->
-                <div id="my-trips"></div>
-                <!-- This will be where previous trips are stored -->
+                <div id="left-content" class="col-lg-6 col-md-6 col-sm-12">
+                    <div id="animal-results"></div>
+                    <!-- This will be the checklist of animals returned from the iNaturalist API / Limit 15 -->
+                    <div id="new-search"></div>
+                    <!-- This will be a button saving a user's finished trip and starting a new one -->
+                    <div id="my-trips"></div>
+                    <!-- This will be where previous trips are stored -->
+                </div>
             </div>
 
-            <div class="card col-md-6">
-                <h2 class="text-center">My Discoveries</h2>
+            <div class="card col-lg-6 col-md-6 col-sm-12">
+                <h2 class="text-center"><i class="fas fa-paw"></i> My Discoveries <i class="fas fa-paw"></i></h2>
                 <hr>
-                <div id="discovered-animal"></div>
-                <div id="place-found"></div>
-                <div id="date-found"></div>
+                <div id="right-content" class="col-lg-6 col-md-6 col-sm-12">
+                    <div id="discovered-animal"></div>
+                    <div id="place-found"></div>
+                    <div id="date-found"></div>
+                </div>
             </div>
         </div>
 

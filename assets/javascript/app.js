@@ -92,10 +92,10 @@ var getDates = () => {
 // jQuery plugin for the date range found here "http://www.daterangepicker.com/"
 $(function () {
     $('input[name="daterange"').daterangepicker({
-        opens: 'left'
+        opens: 'right'
     }, function (start, end) {
         trip.startDate = start.format('MM-DD-YYYY');
         trip.endDate = end.format('MM-DD-YYYY');
-        console.log(startDate, endDate);
+        console.log(trip.startDate, trip.endDate);
     });
 });
