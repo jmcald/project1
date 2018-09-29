@@ -220,12 +220,6 @@ var destinationArr = [
         name: "Carlsbad Caverns National Park"
     },
 ];
-
-
-
-// var dumStartDate = "06/25/2018";
-// var dumEndDate = "08/29/2018";
-
 // getting trip info from dom
 
 
@@ -254,9 +248,6 @@ var returnMonths = (startM, endM) => {
     return months.join('%2C');
 
 };
-// returnMonths(dumStartDate, dumEndDate);
-// returnDays(dumStartDate, dumEndDate);
-
 
 var popular = true;
 var photos = true;
@@ -266,8 +257,9 @@ function iNatAPI(trip) {
 
     var daysString = returnDays(trip.startDate, trip.endDate);
     var monthString = returnMonths(trip.startDate, trip.endDate);
+    // added the .replace function to make sure the entire trip.destination string was included in the query.
+    var local = trip.destination.replace(/\s+/g, '%20');
     var responNum = 25;
-    var local = trip.destination;
     var queryURL = `https://api.inaturalist.org/v1/observations/species_counts?photos=true&popular=true&verifiable=true&day=${daysString}&month=${monthString}&local=${local}&per_page=${responNum}`
     console.log(queryURL);
     $.ajax({
@@ -281,27 +273,26 @@ function iNatAPI(trip) {
             var wikiLink = res[i].taxon.wikipedia_url;
             console.log([name, imgURL, wikiLink]);
         }
-
-
     });
 }
 
 
 $(document).ready(function () {
     populateDestinations(destinationArr);
+    
+    $(document).on("click", ".dropdown-item", function () {
+        trip.destination = $(this).attr("park-name");
+        console.log(trip.destination);
+    });
 
     $("#btn-submit").on("click", function (event) {
         event.preventDefault();
-        trip.destination = $("#destination").val().trim();
         console.log("trip.destination", trip.destination);
+        iNatAPI(trip);
     });
 
 });
 
-
-var getDates = () => {
-
-};
 
 // jQuery plugin for the date range found here "http://www.daterangepicker.com/"
 $(function () {
