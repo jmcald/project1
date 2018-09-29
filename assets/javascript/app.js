@@ -1,3 +1,4 @@
+// Firebase initialization code
 var config = {
     apiKey: "AIzaSyDUabdQvO-s8kMblw1APXzvCIDwJ5A9Iyc",
     authDomain: "project1-c9ffe.firebaseapp.com",
@@ -8,18 +9,12 @@ var config = {
 };
 firebase.initializeApp(config);
 var database = firebase.database();
-// get information back from the inaturalist api
-// Query Parameters
-var trip = {
-    tripName : "",
-    startDate: "",
-    endDate: "",
-    destination: "Yellowstone",
-};
+
 // Very long array of Nation Parks and their IDs. 
-//We would have liked to get this from an API, but the NPS api did not provide this. 
+// We would have liked to get this from an API, but the NPS api did not provide this. 
 var destinationArr = [
-    {   parkID: "ACAD",
+    {
+        parkID: "ACAD",
         name: "Acadia National Park"
     }, {
         parkID: "ARCH",
@@ -194,8 +189,55 @@ var destinationArr = [
         name: "Zion National Park"
     }
 ];
-// getting trip info from dom
+var trip = {
+    tripName: "",
+    startDate: "",
+    endDate: "",
+    destination: "",
+    animalArray: [{}],
+};
 
+$(document).ready(function () {
+    populateDestinationDropDown(destinationArr);
+
+    $(document).on("click", ".dropdown-item", function () {
+        trip.destination = $(this).attr("park-name");
+        console.log(trip.destination);
+    });
+
+    $("#btn-submit").on("click", function (event) {
+        event.preventDefault();
+        trip.tripName = $("#trip-name").val().trim();
+        $("#trip-name").val("");
+        console.log(trip);
+        pushTrips(trip.tripName);
+        iNatAPI(trip);
+    });
+
+    database.ref("animal-list").on("child_added", function (snapshot) {
+        var sv = snapshot.val();
+        populateAnimalList(sv);
+    });
+});
+
+// jQuery plugin for the date range found here "http://www.daterangepicker.com/"
+$(function () {
+    $('input[name="daterange"').daterangepicker({
+        opens: 'right'
+    }, function (start, end) {
+        trip.startDate = start.format('MM-DD-YYYY');
+        trip.endDate = end.format('MM-DD-YYYY');
+        console.log(trip.startDate, trip.endDate);
+    });
+});
+
+function populateDestinationDropDown(arr) {
+    for (var i = 0; i < arr.length; i++) {
+        var newAnchor = $("<a>");
+        newAnchor.attr("parkID", arr[i].parkID).attr("park-name", arr[i].name).addClass("dropdown-item").text(arr[i].name);
+        $("#park-dropdown").append(newAnchor);
+    }
+}
 
 var returnDays = (startD, endD) => {
     var sDate = moment(startD);
@@ -209,6 +251,7 @@ var returnDays = (startD, endD) => {
     console.log(days);
     return days.join('%2C');
 };
+
 var returnMonths = (startM, endM) => {
     var sMonth = moment(startM);
     var eMonth = moment(endM);
@@ -223,33 +266,13 @@ var returnMonths = (startM, endM) => {
 
 };
 
-function iNatAPI(trip) {
-    var popular = true;
-    var photos = true;
-    var verifiable = true;
-    var daysString = returnDays(trip.startDate, trip.endDate);
-    var monthString = returnMonths(trip.startDate, trip.endDate);
-    // added the .replace function to make sure the entire trip.destination string was included in the query.
-    var local = trip.destination.replace(/\s+/g, '%20');
-    var responNum = 10;
-    var queryURL = `https://api.inaturalist.org/v1/observations/species_counts?photos=${photos}&popular=${popular}&verifiable=${verifiable}&day=${daysString}&month=${monthString}&local=${local}&per_page=${responNum}`
-    console.log(queryURL);
-    $.ajax({
-        url: queryURL,
-        method: "GET"
-    }).then(function (response) {
-        var res = response.results;
-        for (var i = 0; i < res.length; i++) {
-            var animalObj = {
-                tripName: trip.tripName,
-                name: res[i].taxon.preferred_common_name,
-                taxonName: res[i].taxon.name,
-                imgURL: res[i].taxon.default_photo.medium_url,
-                wikiLink: res[i].taxon.wikipedia_url,
-            };
-            console.log(animalObj);
-            pushAnimalList(animalObj);
-        }
+function pushAnimalList(obj) {
+    database.ref(obj.tripName).push({
+        name: obj.name,
+        taxonName: obj.taxonName,
+        imgURL: obj.imgURL,
+        wikiLink: obj.wikiLink,
+        dataAdded: firebase.database.ServerValue.TIMESTAMP
     });
 }
 
@@ -280,52 +303,46 @@ function pushAnimalList(obj) {
         taxonName: obj.taxonName,
         imgURL: obj.imgURL,
         wikiLink: obj.wikiLink,
+        animalArray: obj.animalArray,
         dataAdded: firebase.database.ServerValue.TIMESTAMP
     });
 }
 
-
-$(document).ready(function () {
-    populateDestinations(destinationArr);
-
-    $(document).on("click", ".dropdown-item", function () {
-        trip.destination = $(this).attr("park-name");
-        console.log(trip.destination);
+function pushTrip(tripname) {
+    database.ref("trips").push({
+        tripName: tripname,
+        startDate: "",
     });
+}
 
-    $("#btn-submit").on("click", function (event) {
-        event.preventDefault();
-        console.log("trip.destination", trip.destination);
-        iNatAPI(trip);
+function iNatAPI(trip) {
+    var popular = true;
+    var photos = true;
+    var verifiable = true;
+    var daysString = returnDays(trip.startDate, trip.endDate);
+    var monthString = returnMonths(trip.startDate, trip.endDate);
+    // added the .replace function to make sure the entire trip.destination string was included in the query.
+    var local = trip.destination.replace(/\s+/g, '%20');
+    var responNum = 10;
+    var queryURL = `https://api.inaturalist.org/v1/observations/species_counts?photos=${photos}&popular=${popular}&verifiable=${verifiable}&day=${daysString}&month=${monthString}&local=${local}&per_page=${responNum}`
+    console.log(queryURL);
+    $.ajax({
+        url: queryURL,
+        method: "GET"
+    }).then(function (response) {
+        var res = response.results;
+        for (var i = 0; i < res.length; i++) {
+            
+            var animalObj = {
+                tripName: trip.tripName,
+                name: res[i].taxon.preferred_common_name,
+                taxonName: res[i].taxon.name,
+                imgURL: res[i].taxon.default_photo.medium_url,
+                wikiLink: res[i].taxon.wikipedia_url,
+            };
+            trip.animalArray.push(animalObj);
+            console.log(animalObj);
+        }
+        pushAnimalList(trip);
     });
-
-    database.ref("animal-list").on("child_added", function(snapshot){
-        var sv = snapshot.val();
-        populateAnimalList(sv);
-    });
-});
-
-
-
-var getDates = () => {
-
-};
-
-// jQuery plugin for the date range found here "http://www.daterangepicker.com/"
-$(function () {
-    $('input[name="daterange"').daterangepicker({
-        opens: 'right'
-    }, function (start, end) {
-        trip.startDate = start.format('MM-DD-YYYY');
-        trip.endDate = end.format('MM-DD-YYYY');
-        console.log(trip.startDate, trip.endDate);
-    });
-});
-
-function populateDestinations(arr) {
-    for (var i = 0; i < arr.length; i++) {
-        var newAnchor = $("<a>");
-        newAnchor.attr("parkID", arr[i].parkID).attr("park-name", arr[i].name).addClass("dropdown-item").text(arr[i].name);
-        $("#park-dropdown").append(newAnchor);
-    }
 }
