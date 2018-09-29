@@ -11,7 +11,7 @@ var database = firebase.database();
 // get information back from the inaturalist api
 // Query Parameters
 var trip = {
-    tripName : '',
+    tripName : "",
     startDate: "",
     endDate: "",
     destination: "Yellowstone",
@@ -257,7 +257,6 @@ var returnMonths = (startM, endM) => {
 
 };
 
-
 function iNatAPI(trip) {
     var popular = true;
     var photos = true;
@@ -276,6 +275,7 @@ function iNatAPI(trip) {
         var res = response.results;
         for (var i = 0; i < res.length; i++) {
             var animalObj = {
+                tripName: trip.tripName,
                 name: res[i].taxon.preferred_common_name,
                 taxonName: res[i].taxon.name,
                 imgURL: res[i].taxon.default_photo.medium_url,
@@ -306,11 +306,10 @@ function populateAnimalList(obj) {
         newDiv
     );
     $("#animal-list").append(newLi);
-
 }
 
 function pushAnimalList(obj) {
-    database.ref("animal-list").push({
+    database.ref(obj.tripName).push({
         name: obj.name,
         taxonName: obj.taxonName,
         imgURL: obj.imgURL,
