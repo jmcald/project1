@@ -11,6 +11,7 @@ var database = firebase.database();
 // get information back from the inaturalist api
 // Query Parameters
 var trip = {
+    tripName : '',
     startDate: "",
     endDate: "",
     destination: "Yellowstone",
@@ -265,7 +266,7 @@ function iNatAPI(trip) {
     var monthString = returnMonths(trip.startDate, trip.endDate);
     // added the .replace function to make sure the entire trip.destination string was included in the query.
     var local = trip.destination.replace(/\s+/g, '%20');
-    var responNum = 25;
+    var responNum = 10;
     var queryURL = `https://api.inaturalist.org/v1/observations/species_counts?photos=${photos}&popular=${popular}&verifiable=${verifiable}&day=${daysString}&month=${monthString}&local=${local}&per_page=${responNum}`
     console.log(queryURL);
     $.ajax({
@@ -280,17 +281,31 @@ function iNatAPI(trip) {
                 imgURL: res[i].taxon.default_photo.medium_url,
                 wikiLink: res[i].taxon.wikipedia_url,
             };
-            // var name = res[i].taxon.preferred_common_name;
-            // var taxonName = res[i].taxon.name;
-            // var imgURL = res[i].taxon.default_photo.medium_url;
-            // var wikiLink = res[i].taxon.wikipedia_url;
             console.log(animalObj);
             pushAnimalList(animalObj);
         }
     });
 }
 
-function createAnimalList(obj) {
+function populateAnimalList(obj) {
+    var newLi = $("<li>");
+    var newImg = $("<img>");
+    newImg.addClass("mr-3").attr("src", obj.imgURL).attr("alt", obj.name);
+    var newDiv = $("<div>");
+    newDiv.addClass("media-body");
+    var newH5 = $("<h5>");
+    newH5.addClass("mt-0 mb-1").text(obj.name);
+    var newAnchor = $("<a>");
+    newAnchor.attr("href", obj.wikiLink).attr("target", "_blank").addClass("wiki-link").text(obj.wikiLink);
+    newDiv.append(
+        newH5,
+        newAnchor
+    );
+    newLi.addClass("media").append(
+        newImg,
+        newDiv
+    );
+    $("#animal-list").append(newLi);
 
 }
 
@@ -303,8 +318,6 @@ function pushAnimalList(obj) {
         dataAdded: firebase.database.ServerValue.TIMESTAMP
     });
 }
-
-
 
 
 $(document).ready(function () {
@@ -321,6 +334,10 @@ $(document).ready(function () {
         iNatAPI(trip);
     });
 
+    database.ref("animal-list").on("child_added", function(snapshot){
+        var sv = snapshot.val();
+        populateAnimalList(sv);
+    });
 });
 
 

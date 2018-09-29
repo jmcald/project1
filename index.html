@@ -15,6 +15,13 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
         crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+
+    <style>
+    img{
+        height: 65px;
+        width: 65px;
+    }
+    </style>
 </head>
 
 
@@ -45,12 +52,17 @@
                     <button type="submit" class="btn btn-success" title="Submit To Start Your Adventure" id="btn-submit">Submit</button>
                 </form>
             </div>
-            <div id="animal-results"></div>
-            <!-- This will be the checklist of animals returned from the iNaturalist API / Limit 15 -->
-            <div id="new-search"></div>
-            <!-- This will be a button saving a user's finished trip and starting a new one -->
-            <div id="my-trips"></div>
-            <!-- This will be where previous trips are stored -->
+            <div id="animal-results">
+                <ul class="list-unstyled" id="animal-list">
+
+                </ul>
+            </div>
+
+                <!-- This will be the checklist of animals returned from the iNaturalist API / Limit 15 -->
+                <div id="new-search"></div>
+                <!-- This will be a button saving a user's finished trip and starting a new one -->
+                <div id="my-trips"></div>
+                <!-- This will be where previous trips are stored -->
         </div>
         <div class="card col-md-6">
             <h2 class="text-center">My Discoveries</h2>
@@ -68,7 +80,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>F
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script type="text/javascript" src="assets/javascript/app.js"></script>
 </body>
 
