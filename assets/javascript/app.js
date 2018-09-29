@@ -1,17 +1,14 @@
 var ryan= [];
-var mymap = L.map('mapid').setView([51.505, -0.09], 13);
-L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoiam1jYWxkMCIsImEiOiJjam1sOXltbmowMDUwM3FrNHpzZHN0cXdsIn0.muI4K4RBCzUpH3Qbp_7uFA', {
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    maxZoom: 18,
-    id: 'mapbox.streets',
-    accessToken: 'your.mapbox.access.token'
+var mymap = L.map('mapid').setView([{searchLat}, {searchLong}], 10);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(mymap);
-L.marker([51.505, -0.09]).addTo(mymap);
+L.marker([{searchLat}, {searchLong}]).addTo(mymap);
 
 
-var queryURL = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?inputtype=textquery&input=" + searchTerm + "&key=AIzaSyCfYHoTgzB2ZdWyhCujzuQoK32-0PmV_KA"
+var queryURL = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?inputtype=textquery&input=yellowstone&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk"
 
-var searchTerm = "Yellowstone"
+var searchTerm = "yellowstone"
 
 $.ajax({
     url: queryURL,
@@ -22,7 +19,7 @@ $.ajax({
 
   // ignore everything above; or don't
 
-  var parks = [
+var parks = [
     {
         id: "ABLI",
         name: "Abraham Lincoln Birthplace National Historical Park"
@@ -114,7 +111,7 @@ $.ajax({
     {
         id: "ARHO",
         name: "Arlington House The Robert E. Lee Memorial"
-    }
+    },
     {
         id: "ARPO",
         name: "Arkansas Post National Memorial"
@@ -134,7 +131,7 @@ $.ajax({
     {
         id: "BAND",
         name: "Bandelier National Monument"
-    }
+    },
     {
         id: "BAWA",
         name: "Baltimore-Washington National Parkway"
