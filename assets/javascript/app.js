@@ -6,4 +6,16 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=p
     id: 'mapbox.streets',
     accessToken: 'your.mapbox.access.token'
 }).addTo(mymap);
-L.marker([51.505, -0.09]).addTo(map);
+L.marker([51.505, -0.09]).addTo(mymap);
+
+
+var queryURL = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?inputtype=textquery&input=" + searchTerm "&key=AIzaSyCfYHoTgzB2ZdWyhCujzuQoK32-0PmV_KA"
+
+var searchTerm = "Yellowstone"
+
+$.ajax({
+    url: queryURL,
+    method: "GET"
+  }).then(function(response) {
+    console.log(response);
+  });
