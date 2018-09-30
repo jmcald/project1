@@ -198,7 +198,7 @@ var trip = {
 };
 
 $(document).ready(function () {
-    populateDestinationDropDown(destinationArr);
+    fillDestinationDropDown(destinationArr);
 
     $(document).on("click", ".dropdown-item", function () {
         trip.destination = $(this).attr("park-name");
@@ -229,15 +229,24 @@ $(function () {
     });
 });
 
-function populateDestinationDropDown(arr) {
+function fillDestinationDropDown(arr) {
     for (var i = 0; i < arr.length; i++) {
         var newAnchor = $("<a>");
         newAnchor.attr("parkID", arr[i].parkID).attr("park-name", arr[i].name).addClass("dropdown-item").text(arr[i].name);
         $("#park-dropdown").append(newAnchor);
     }
 }
+// This will populate the trip drop down menu
+function fillTripDropDown() {
+    database.ref("trip-list").on("value", function (snapshot) {
+        var sv = snapshot.val();
+        var newAnchor = $("<a>");
+        newAnchor.attr("tripName", sv.tripName);
+    });
 
-var returnDays = (startD, endD) => {
+}
+
+function returnDays(startD, endD) {
     var sDate = moment(startD);
     var eDate = moment(endD);
     var days = [];
@@ -248,9 +257,9 @@ var returnDays = (startD, endD) => {
     }
     console.log(days);
     return days.join('%2C');
-};
+}
 
-var returnMonths = (startM, endM) => {
+function returnMonths(startM, endM) {
     var sMonth = moment(startM);
     var eMonth = moment(endM);
     var months = [];
@@ -262,7 +271,7 @@ var returnMonths = (startM, endM) => {
     console.log("months", months);
     return months.join('%2C');
 
-};
+}
 
 function pushAnimalList(obj) {
     console.log("in pushAnimalsList", obj);
@@ -276,9 +285,7 @@ function pushAnimalList(obj) {
 }
 
 function populateAnimalList(obj) {
-    console.log("in populateAnimalsList", "object: ", obj);
     var animalObjAry = obj.animalArray;
-
     for (var i = 1; i <= animalObjAry.length; i++) {
         var newLi = $("<li>");
         var newImg = $("<img>");
@@ -302,7 +309,6 @@ function populateAnimalList(obj) {
 }
 
 function pushAnimalList(obj) {
-    console.log("in pushAnmialsList", obj.tripName);
     database.ref(obj.tripName).push({
         tripName: obj.tripName,
         startDate: obj.startDate,
