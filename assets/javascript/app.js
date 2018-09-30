@@ -210,14 +210,12 @@ $(document).ready(function () {
         trip.tripName = $("#trip-name").val().trim();
         $("#trip-name").val("");
         console.log(trip);
-        pushTrips(trip.tripName);
         iNatAPI(trip);
+        database.ref("trip-list").push({
+            tripName: trip.tripName,
+        });
     });
 
-    database.ref("animal-list").on("child_added", function (snapshot) {
-        var sv = snapshot.val();
-        populateAnimalList(sv);
-    });
 });
 
 // jQuery plugin for the date range found here "http://www.daterangepicker.com/"
@@ -267,6 +265,7 @@ var returnMonths = (startM, endM) => {
 };
 
 function pushAnimalList(obj) {
+    console.log("in pushAnimalsList", obj);
     database.ref(obj.tripName).push({
         name: obj.name,
         taxonName: obj.taxonName,
@@ -277,41 +276,39 @@ function pushAnimalList(obj) {
 }
 
 function populateAnimalList(obj) {
-    var newLi = $("<li>");
-    var newImg = $("<img>");
-    newImg.addClass("mr-3").attr("src", obj.imgURL).attr("alt", obj.name);
-    var newDiv = $("<div>");
-    newDiv.addClass("media-body");
-    var newH5 = $("<h5>");
-    newH5.addClass("mt-0 mb-1").text(obj.name);
-    var newAnchor = $("<a>");
-    newAnchor.attr("href", obj.wikiLink).attr("target", "_blank").addClass("wiki-link").text(obj.wikiLink);
-    newDiv.append(
-        newH5,
-        newAnchor
-    );
-    newLi.addClass("media").append(
-        newImg,
-        newDiv
-    );
-    $("#animal-list").append(newLi);
+    console.log("in populateAnimalsList", "object: ", obj);
+    var animalObjAry = obj.animalArray;
+
+    for (var i = 1; i <= animalObjAry.length; i++) {
+        var newLi = $("<li>");
+        var newImg = $("<img>");
+        newImg.addClass("mr-3 thumbnail").attr("src", animalObjAry[i].imgURL).attr("alt", animalObjAry[i].name);
+        var newDiv = $("<div>");
+        newDiv.addClass("media-body");
+        var newH5 = $("<h5>");
+        newH5.addClass("mt-0 mb-1").text(animalObjAry[i].name);
+        var newAnchor = $("<a>");
+        newAnchor.attr("href", animalObjAry[i].wikiLink).attr("target", "_blank").addClass("wiki-link").text(animalObjAry[i].wikiLink);
+        newDiv.append(
+            newH5,
+            newAnchor
+        );
+        newLi.addClass("media").append(
+            newImg,
+            newDiv
+        );
+        $("#animal-list").append(newLi);
+    }
 }
 
 function pushAnimalList(obj) {
+    console.log("in pushAnmialsList", obj.tripName);
     database.ref(obj.tripName).push({
-        name: obj.name,
-        taxonName: obj.taxonName,
-        imgURL: obj.imgURL,
-        wikiLink: obj.wikiLink,
+        tripName: obj.tripName,
+        startDate: obj.startDate,
+        endDate: obj.endDate,
         animalArray: obj.animalArray,
         dataAdded: firebase.database.ServerValue.TIMESTAMP
-    });
-}
-
-function pushTrip(tripname) {
-    database.ref("trips").push({
-        tripName: tripname,
-        startDate: "",
     });
 }
 
@@ -332,17 +329,18 @@ function iNatAPI(trip) {
     }).then(function (response) {
         var res = response.results;
         for (var i = 0; i < res.length; i++) {
-            
             var animalObj = {
-                tripName: trip.tripName,
                 name: res[i].taxon.preferred_common_name,
                 taxonName: res[i].taxon.name,
-                imgURL: res[i].taxon.default_photo.medium_url,
+                imgURL: res[i].taxon.default_photo.square_url,
                 wikiLink: res[i].taxon.wikipedia_url,
             };
+            // Adding the list of animals to the array of objects in the trip object
             trip.animalArray.push(animalObj);
-            console.log(animalObj);
         }
+        // pushing animal list to firebase
+        console.log("out of for loop");
         pushAnimalList(trip);
+        populateAnimalList(trip);
     });
 }
