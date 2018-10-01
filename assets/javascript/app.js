@@ -329,3 +329,44 @@ function populateDestinations(arr) {
         $("#park-dropdown").append(newAnchor);
     }
 }
+
+
+
+
+
+
+var searchTerm = "yellowstone"
+
+var searchQueryURL ="https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json?inputtype=textquery&input=" + searchTerm + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk"
+console.log(searchQueryURL)
+
+$.ajax({
+    url: searchQueryURL,
+    method: "GET"
+  }).then(function(response) {
+    var placeID = response.candidates[0].place_id
+    console.log("first ajax")
+    console.log(response);
+    console.log(placeID);
+    var geocodeQueryURL ="https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk"
+    $.ajax({
+        url: geocodeQueryURL,
+        method: "GET"
+      }).then(function(response) {
+        var latitude = response.result.geometry.location.lat
+        var longitude = response.result.geometry.location.lng
+        console.log("nested ajax")
+        console.log(latitude)
+        console.log(longitude)
+        console.log(response);
+        var myMap = L.map('mapid').setView([latitude, longitude], 10);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(myMap);
+        
+        L.marker([latitude, longitude]).addTo(myMap);
+      });
+  });
+
+  // ignore everything above; or don't
+
