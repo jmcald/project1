@@ -1,10 +1,3 @@
-var ryan= [];
-var myMap = L.map('mapid').setView([44.427963, -110.588455], 10);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(myMap);
-var ryan= [];
-
 var searchTerm = "yellowstone"
 
 var searchQueryURL ="https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json?inputtype=textquery&input=" + searchTerm + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk"
@@ -29,6 +22,10 @@ $.ajax({
         console.log(latitude)
         console.log(longitude)
         console.log(response);
+        var myMap = L.map('mapid').setView([latitude, longitude], 10);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(myMap);
         
         L.marker([latitude, longitude]).addTo(myMap);
       });
