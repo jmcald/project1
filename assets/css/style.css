@@ -49,3 +49,8 @@ h2 {
 #mapid { 
     height: 280px; 
 }
+
+.thumbnail {
+    width: 65px;
+    height: 65px;
+}
