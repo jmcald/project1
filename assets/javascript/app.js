@@ -291,6 +291,49 @@ $(document).ready(function () {
     $(document).on("click", ".dropdown-item", function () {
         trip.destination = $(this).attr("park-name");
         console.log(trip.destination);
+
+        //I added a space so users can see their selection after they choose their destination; we can definately move/remove it
+
+        var selectedDestination = $("<div>");
+        $(selectedDestination).text(trip.destination);
+        $(selectedDestination).attr("class", "alert alert-light col-lg-12");
+        $("form").append(selectedDestination);
+
+        //I want the "selected destination" to be the input in the ajax call, but i can't get it to work yet, so currently "searchTerm" is set to equal "Yellowstone National Park"
+
+        var searchTerm = trip.destination
+
+        var searchQueryURL ="https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json?inputtype=textquery&input=" + searchTerm + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk"
+        console.log(searchQueryURL)
+
+        $.ajax({
+            url: searchQueryURL,
+            method: "GET"
+        }).then(function(response) {
+            var placeID = response.candidates[0].place_id
+            console.log("first ajax")
+            console.log(response);
+            console.log(placeID);
+            var geocodeQueryURL ="https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk"
+            $.ajax({
+                url: geocodeQueryURL,
+                method: "GET"
+            }).then(function(response) {
+                var latitude = response.result.geometry.location.lat
+                var longitude = response.result.geometry.location.lng
+                console.log("nested ajax")
+                console.log(latitude)
+                console.log(longitude)
+                console.log(response);
+                var myMap = L.map('mapid').setView([latitude, longitude], 10);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(myMap);
+                
+                L.marker([latitude, longitude]).addTo(myMap);
+            });
+          });
+
     });
 
     $("#btn-submit").on("click", function (event) {
@@ -334,39 +377,4 @@ function populateDestinations(arr) {
 
 
 
-
-var searchTerm = "yellowstone"
-
-var searchQueryURL ="https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json?inputtype=textquery&input=" + searchTerm + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk"
-console.log(searchQueryURL)
-
-$.ajax({
-    url: searchQueryURL,
-    method: "GET"
-  }).then(function(response) {
-    var placeID = response.candidates[0].place_id
-    console.log("first ajax")
-    console.log(response);
-    console.log(placeID);
-    var geocodeQueryURL ="https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk"
-    $.ajax({
-        url: geocodeQueryURL,
-        method: "GET"
-      }).then(function(response) {
-        var latitude = response.result.geometry.location.lat
-        var longitude = response.result.geometry.location.lng
-        console.log("nested ajax")
-        console.log(latitude)
-        console.log(longitude)
-        console.log(response);
-        var myMap = L.map('mapid').setView([latitude, longitude], 10);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(myMap);
-        
-        L.marker([latitude, longitude]).addTo(myMap);
-      });
-  });
-
-  // ignore everything above; or don't
 

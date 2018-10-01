@@ -45,4 +45,7 @@ h2 {
     max-height: 250%;
     overflow: auto;
 }
-#mapid { height: 180px; }
+
+#mapid { 
+    height: 280px; 
+}
