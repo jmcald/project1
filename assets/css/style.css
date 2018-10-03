@@ -45,6 +45,11 @@ h2 {
     max-height: 250%;
     overflow: auto;
 }
+
+#mapid { 
+    height: 280px; 
+}
+
 .thumbnail {
     width: 65px;
     height: 65px;
