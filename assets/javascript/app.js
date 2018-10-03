@@ -237,11 +237,12 @@ $(document).ready(function () {
 
 //I added a space so users can see their selection after they choose their destination; we can definately move/remove it
 function createParkInfoDiv(obj) {
+    $("#alert-div").empty();
     console.log("in create park fun")
     var selectedDestination = $("<div>");
     $(selectedDestination).text(obj.destination);
     $(selectedDestination).attr("class", "alert alert-light col-lg-12").attr("id", "destination-alert");
-    $("form").append(selectedDestination);
+    $("#alert-div").append(selectedDestination);
 }
 
 function leafletAPICall(obj) {
