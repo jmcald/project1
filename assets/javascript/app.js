@@ -200,12 +200,13 @@ var trip = {
 $(document).ready(function () {
     fillDestinationDropDown(destinationArr);
 
-    $(document).on("click", ".dropdown-item", function () {
-        trip.destination = $(this).attr("park-name");
-        console.log(trip.destination);
-    });
+    // $(document).on("click", ".dropdown-item", function () {
+    //     trip.destination = $(this).attr("park-name");
+    //     console.log(trip.destination);
+    // });
 
     $("#btn-submit").on("click", function (event) {
+        console.log("clicked button");
         event.preventDefault();
         trip.tripName = $("#trip-name").val().trim();
         $("#trip-name").val("");
@@ -230,17 +231,17 @@ $(document).ready(function () {
 
         //I want the "selected destination" to be the input in the ajax call, but i can't get it to work yet, so currently "searchTerm" is set to equal "Yellowstone National Park"
 
-        var searchTerm = trip.destination
+        var searchTerm = trip.destination;
 
-        var searchQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json?inputtype=textquery&input=" + searchTerm + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk"
-        console.log(searchQueryURL)
+        var searchQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json?inputtype=textquery&input=" + searchTerm + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk";
+        console.log(searchQueryURL);
 
         $.ajax({
             url: searchQueryURL,
             method: "GET"
         }).then(function (response) {
-            var placeID = response.candidates[0].place_id
-            console.log("first ajax")
+            var placeID = response.candidates[0].place_id;
+            console.log("first ajax");
             console.log(response);
             console.log(placeID);
             var geocodeQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk"
@@ -357,6 +358,18 @@ function populateAnimalList(obj) {
         $("#animal-list").append(newLi);
     }
 }
+
+function pushAnimalList(obj) {
+    console.log("in pushAnmialsList", obj.tripName);
+    database.ref(obj.tripName).push({
+        tripName: obj.tripName,
+        startDate: obj.startDate,
+        endDate: obj.endDate,
+        animalArray: obj.animalArray,
+        dataAdded: firebase.database.ServerValue.TIMESTAMP
+    });
+}
+
 function iNatAPI(trip) {
     var popular = true;
     var photos = true;
@@ -372,6 +385,7 @@ function iNatAPI(trip) {
         url: queryURL,
         method: "GET"
     }).then(function (response) {
+        console.log("i nat response: ", response);
         var res = response.results;
         for (var i = 0; i < res.length; i++) {
             var animalObj = {
@@ -382,6 +396,7 @@ function iNatAPI(trip) {
             };
             // Adding the list of animals to the array of objects in the trip object
             trip.animalArray.push(animalObj);
+            console.log(trip);
         }
         // pushing animal list to firebase
         console.log("out of for loop");
