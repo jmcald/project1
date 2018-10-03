@@ -200,12 +200,13 @@ var trip = {
 $(document).ready(function () {
     fillDestinationDropDown(destinationArr);
 
-    $(document).on("click", ".dropdown-item", function () {
-        trip.destination = $(this).attr("park-name");
-        console.log(trip.destination);
-    });
+    // $(document).on("click", ".dropdown-item", function () {
+    //     trip.destination = $(this).attr("park-name");
+    //     console.log(trip.destination);
+    // });
 
     $("#btn-submit").on("click", function (event) {
+        console.log("clicked button");
         event.preventDefault();
         trip.tripName = $("#trip-name").val().trim();
         $("#trip-name").val("");
@@ -259,7 +260,7 @@ $(document).ready(function () {
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 }).addTo(myMap);
 
-                L.marker([latitude, longitude]).addTo(myMap);
+                // L.marker([latitude, longitude]).addTo(myMap);
             });
         });
 
@@ -334,35 +335,41 @@ function pushAnimalList(obj) {
 }
 
 function populateAnimalList(obj) {
-    var newLi = $("<li>");
-    var newImg = $("<img>");
-    newImg.addClass("mr-3").attr("src", obj.imgURL).attr("alt", obj.name);
-    var newDiv = $("<div>");
-    newDiv.addClass("media-body");
-    var newH5 = $("<h5>");
-    newH5.addClass("mt-0 mb-1").text(obj.name);
-    var newAnchor = $("<a>");
-    newAnchor.attr("href", obj.wikiLink).attr("target", "_blank").addClass("wiki-link").text(obj.wikiLink);
-    newDiv.append(
-        newH5,
-        newAnchor
-    );
-    newLi.addClass("media").append(
-        newImg,
-        newDiv
-    );
-    $("#animal-list").append(newLi);
+    console.log("in populateAnimalsList", "object: ", obj);
+    var animalObjAry = obj.animalArray;
+    for (var i = 1; i <= animalObjAry.length; i++) {
+        var newLi = $("<li>");
+        var newImg = $("<img>");
+        newImg.addClass("mr-3 thumbnail").attr("src", animalObjAry[i].imgURL).attr("alt", animalObjAry[i].name);
+        var newDiv = $("<div>");
+        newDiv.addClass("media-body");
+        var newH5 = $("<h5>");
+        newH5.addClass("mt-0 mb-1").text(animalObjAry[i].name);
+        var newAnchor = $("<a>");
+        newAnchor.attr("href", animalObjAry[i].wikiLink).attr("target", "_blank").addClass("wiki-link").text(animalObjAry[i].wikiLink);
+        newDiv.append(
+            newH5,
+            newAnchor
+        );
+        newLi.addClass("media").append(
+            newImg,
+            newDiv
+        );
+        $("#animal-list").append(newLi);
+    }
 }
 
 function pushAnimalList(obj) {
+    console.log("in pushAnmialsList", obj.tripName);
     database.ref(obj.tripName).push({
-        name: obj.name,
-        taxonName: obj.taxonName,
-        imgURL: obj.imgURL,
-        wikiLink: obj.wikiLink,
+        tripName: obj.tripName,
+        startDate: obj.startDate,
+        endDate: obj.endDate,
+        animalArray: obj.animalArray,
         dataAdded: firebase.database.ServerValue.TIMESTAMP
     });
 }
+
 function iNatAPI(trip) {
     var popular = true;
     var photos = true;
@@ -378,6 +385,7 @@ function iNatAPI(trip) {
         url: queryURL,
         method: "GET"
     }).then(function (response) {
+        console.log("i nat response: ", response);
         var res = response.results;
         for (var i = 0; i < res.length; i++) {
             var animalObj = {
@@ -388,6 +396,7 @@ function iNatAPI(trip) {
             };
             // Adding the list of animals to the array of objects in the trip object
             trip.animalArray.push(animalObj);
+            console.log(trip);
         }
         // pushing animal list to firebase
         console.log("out of for loop");
