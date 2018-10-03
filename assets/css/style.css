@@ -6,7 +6,6 @@
 body {
     font-family: 'Basic', sans-serif;
     font-size: 20px;
-    background: url("../images/darkforest.jpg");
 }
 
 #calendar {
@@ -23,9 +22,13 @@ body {
     color: darkolivegreen;
 }
 
-h1, h2, h3, h4 {
+h2, h3, h4 {
     font-family: 'Shadows Into Light', cursive;
     font-weight: bold;
+}
+
+h1 {
+    font-family: 'Fredericka the Great', cursive;
 }
 
 h2 {
@@ -46,11 +49,27 @@ h2 {
     overflow: auto;
 }
 
-#mapid { 
-    height: 280px; 
-}
-
 .thumbnail {
     width: 65px;
     height: 65px;
+    margin: 5px;
+    border-radius: 50%;
+    transition: transform .5s;
+}
+
+.thumbnail:hover {
+    transform: scale(2);
+}
+
+#my-video {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    z-index: -100;
+}
+
+#mapid { 
+    height: 280px; 
 }

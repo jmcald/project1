@@ -285,73 +285,6 @@ function pushAnimalList(obj) {
 }
 
 function populateAnimalList(obj) {
-    var animalObjAry = obj.animalArray;
-    for (var i = 1; i <= animalObjAry.length; i++) {
-        var newLi = $("<li>");
-        var newImg = $("<img>");
-        newImg.addClass("mr-3 thumbnail").attr("src", animalObjAry[i].imgURL).attr("alt", animalObjAry[i].name);
-        var newDiv = $("<div>");
-        newDiv.addClass("media-body");
-        var newH5 = $("<h5>");
-        newH5.addClass("mt-0 mb-1").text(animalObjAry[i].name);
-        var newAnchor = $("<a>");
-        newAnchor.attr("href", animalObjAry[i].wikiLink).attr("target", "_blank").addClass("wiki-link").text(animalObjAry[i].wikiLink);
-        newDiv.append(
-            newH5,
-            newAnchor
-        );
-        newLi.addClass("media").append(
-            newImg,
-            newDiv
-        );
-        $("#animal-list").append(newLi);
-    }
-}
-
-function pushAnimalList(obj) {
-    database.ref(obj.tripName).push({
-        tripName: obj.tripName,
-        startDate: obj.startDate,
-        endDate: obj.endDate,
-        animalArray: obj.animalArray,
-        dataAdded: firebase.database.ServerValue.TIMESTAMP
-    });
-}
-
-function iNatAPI(trip) {
-    var popular = true;
-    var photos = true;
-    var verifiable = true;
-    var daysString = returnDays(trip.startDate, trip.endDate);
-    var monthString = returnMonths(trip.startDate, trip.endDate);
-    // added the .replace function to make sure the entire trip.destination string was included in the query.
-    var local = trip.destination.replace(/\s+/g, '%20');
-    var responNum = 10;
-    var queryURL = `https://api.inaturalist.org/v1/observations/species_counts?photos=${photos}&popular=${popular}&verifiable=${verifiable}&day=${daysString}&month=${monthString}&local=${local}&per_page=${responNum}`
-    console.log(queryURL);
-    $.ajax({
-        url: queryURL,
-        method: "GET"
-    }).then(function (response) {
-        var res = response.results;
-        for (var i = 0; i < res.length; i++) {
-            var animalObj = {
-                name: res[i].taxon.preferred_common_name,
-                taxonName: res[i].taxon.name,
-                imgURL: res[i].taxon.default_photo.square_url,
-                wikiLink: res[i].taxon.wikipedia_url,
-            };
-            // Adding the list of animals to the array of objects in the trip object
-            trip.animalArray.push(animalObj);
-        }
-        // pushing animal list to firebase
-        console.log("out of for loop");
-        pushAnimalList(trip);
-        populateAnimalList(trip);
-    });
-}
-
-function populateAnimalList(obj) {
     var newLi = $("<li>");
     var newImg = $("<img>");
     newImg.addClass("mr-3").attr("src", obj.imgURL).attr("alt", obj.name);
@@ -469,4 +402,3 @@ function populateDestinations(arr) {
         newAnchor.attr("parkID", arr[i].parkID).attr("park-name", arr[i].name).addClass("dropdown-item").text(arr[i].name);
         $("#park-dropdown").append(newAnchor);
     }
-}
