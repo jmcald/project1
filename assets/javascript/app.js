@@ -405,6 +405,109 @@ function iNatAPI(trip) {
     });
 }
 
+<<<<<<< HEAD
+=======
+function populateAnimalList(obj) {
+    var newLi = $("<li>");
+    var newImg = $("<img>");
+    newImg.addClass("mr-3").attr("src", obj.imgURL).attr("alt", obj.name);
+    var newDiv = $("<div>");
+    newDiv.addClass("media-body");
+    var newH5 = $("<h5>");
+    newH5.addClass("mt-0 mb-1").text(obj.name);
+    var newAnchor = $("<a>");
+    newAnchor.attr("href", obj.wikiLink).attr("target", "_blank").addClass("wiki-link").text(obj.wikiLink);
+    newDiv.append(
+        newH5,
+        newAnchor
+    );
+    newLi.addClass("media").append(
+        newImg,
+        newDiv
+    );
+    $("#animal-list").append(newLi);
+}
+
+function pushAnimalList(obj) {
+    database.ref(obj.tripName).push({
+        name: obj.name,
+        taxonName: obj.taxonName,
+        imgURL: obj.imgURL,
+        wikiLink: obj.wikiLink,
+        dataAdded: firebase.database.ServerValue.TIMESTAMP
+    });
+}
+
+
+$(document).ready(function () {
+    populateDestinations(destinationArr);
+
+    $(document).on("click", ".dropdown-item", function () {
+        trip.destination = $(this).attr("park-name");
+        console.log(trip.destination);
+
+        //I added a space so users can see their selection after they choose their destination; we can definately move/remove it
+
+        var selectedDestination = $("<div>");
+        $(selectedDestination).text(trip.destination);
+        $(selectedDestination).attr("class", "alert alert-light col-lg-12");
+        $("form").append(selectedDestination);
+
+        var searchTerm = trip.destination
+
+        var searchQueryURL ="https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json?inputtype=textquery&input=" + searchTerm + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk"
+        console.log(searchQueryURL)
+
+        $.ajax({
+            url: searchQueryURL,
+            method: "GET"
+        }).then(function(response) {
+            var placeID = response.candidates[0].place_id
+            console.log("first ajax")
+            console.log(response);
+            console.log(placeID);
+            var geocodeQueryURL ="https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk"
+            $.ajax({
+                url: geocodeQueryURL,
+                method: "GET"
+            }).then(function(response) {
+                var latitude = response.result.geometry.location.lat
+                var longitude = response.result.geometry.location.lng
+                console.log("nested ajax")
+                console.log(latitude)
+                console.log(longitude)
+                console.log(response);
+                var myMap = L.map('mapid').setView([latitude, longitude], 10);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                scrollWheelZoom: false
+                }).addTo(myMap);
+                
+                L.marker([latitude, longitude]).addTo(myMap);
+            });
+          });
+
+    });
+
+    $("#btn-submit").on("click", function (event) {
+        event.preventDefault();
+        console.log("trip.destination", trip.destination);
+        iNatAPI(trip);
+    });
+
+    database.ref("animal-list").on("child_added", function(snapshot){
+        var sv = snapshot.val();
+        populateAnimalList(sv);
+    });
+});
+
+
+
+var getDates = () => {
+
+};
+
+>>>>>>> JCBranch
 // jQuery plugin for the date range found here "http://www.daterangepicker.com/"
 $(function () {
     $('input[name="daterange"').daterangepicker({
