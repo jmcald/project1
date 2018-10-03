@@ -260,7 +260,7 @@ $(document).ready(function () {
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 }).addTo(myMap);
 
-                // L.marker([latitude, longitude]).addTo(myMap);
+                L.marker([latitude, longitude]).addTo(myMap);
             });
         });
 
