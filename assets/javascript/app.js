@@ -231,17 +231,17 @@ $(document).ready(function () {
 
         //I want the "selected destination" to be the input in the ajax call, but i can't get it to work yet, so currently "searchTerm" is set to equal "Yellowstone National Park"
 
-        var searchTerm = trip.destination
+        var searchTerm = trip.destination;
 
-        var searchQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json?inputtype=textquery&input=" + searchTerm + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk"
-        console.log(searchQueryURL)
+        var searchQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json?inputtype=textquery&input=" + searchTerm + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk";
+        console.log(searchQueryURL);
 
         $.ajax({
             url: searchQueryURL,
             method: "GET"
         }).then(function (response) {
-            var placeID = response.candidates[0].place_id
-            console.log("first ajax")
+            var placeID = response.candidates[0].place_id;
+            console.log("first ajax");
             console.log(response);
             console.log(placeID);
             var geocodeQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk"
