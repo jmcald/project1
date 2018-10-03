@@ -397,8 +397,6 @@ $(document).ready(function () {
         $(selectedDestination).attr("class", "alert alert-light col-lg-12");
         $("form").append(selectedDestination);
 
-        //I want the "selected destination" to be the input in the ajax call, but i can't get it to work yet, so currently "searchTerm" is set to equal "Yellowstone National Park"
-
         var searchTerm = trip.destination
 
         var searchQueryURL ="https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json?inputtype=textquery&input=" + searchTerm + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk"
@@ -425,7 +423,8 @@ $(document).ready(function () {
                 console.log(response);
                 var myMap = L.map('mapid').setView([latitude, longitude], 10);
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                scrollWheelZoom: false
                 }).addTo(myMap);
                 
                 L.marker([latitude, longitude]).addTo(myMap);
