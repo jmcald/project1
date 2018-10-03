@@ -199,7 +199,7 @@ var trip = {
 
 $(document).ready(function () {
     fillDestinationDropDown(destinationArr);
-    // fillTripDropDown();
+    fillTripDropDown();
 
     $("#btn-submit").on("click", function (event) {
         console.log("clicked button");
@@ -216,63 +216,73 @@ $(document).ready(function () {
 
     $(document).on("click", ".trip-item", function () {
         $("#animal-list").empty();
-        var animalObj = $(this).attr("trip-name");
-        database.ref(animalObj).on("value", function (snapshot) {
+        var tripName = $(this).attr("trip-name");
+        database.ref(tripName).on("value", function (snapshot) {
             var sv = snapshot.val();
             console.log("from trip", sv);
             populateAnimalList(sv);
+            trip.tripName = sv.tripName;
+            trip.startDate = sv.startDate;
+            trip.endDate = sv.endDate;
+            trip.destination = sv.destination;
+            trip.animalArray = sv.animalArray;
+            console.log(trip);
+            $("#destination-alert").empty();
+            createParkInfoDiv(sv);
+            leafletAPICall(sv);
         });
     });
 
-    $(document).on("click", ".dropdown-item", function () {
+    $(document).on("click", ".park-item", function () {
         trip.destination = $(this).attr("park-name");
         console.log(trip.destination);
-
-        //I added a space so users can see their selection after they choose their destination; we can definately move/remove it
-
-        var selectedDestination = $("<div>");
-        $(selectedDestination).text(trip.destination);
-        $(selectedDestination).attr("class", "alert alert-light col-lg-12");
-        $("form").append(selectedDestination);
-
-        //I want the "selected destination" to be the input in the ajax call, but i can't get it to work yet, so currently "searchTerm" is set to equal "Yellowstone National Park"
-
-        var searchTerm = trip.destination;
-
-        var searchQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json?inputtype=textquery&input=" + searchTerm + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk";
-        console.log(searchQueryURL);
-
-        $.ajax({
-            url: searchQueryURL,
-            method: "GET"
-        }).then(function (response) {
-            var placeID = response.candidates[0].place_id;
-            console.log("first ajax");
-            console.log(response);
-            console.log(placeID);
-            var geocodeQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk"
-            $.ajax({
-                url: geocodeQueryURL,
-                method: "GET"
-            }).then(function (response) {
-                var latitude = response.result.geometry.location.lat
-                var longitude = response.result.geometry.location.lng
-                console.log("nested ajax")
-                console.log(latitude)
-                console.log(longitude)
-                console.log(response);
-                var myMap = L.map('mapid').setView([latitude, longitude], 10);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                }).addTo(myMap);
-
-                L.marker([latitude, longitude]).addTo(myMap);
-            });
-        });
+        createParkInfoDiv();
+        leafletAPICall();
 
     });
-
 });
+//I added a space so users can see their selection after they choose their destination; we can definately move/remove it
+function createParkInfoDiv(obj) {
+    console.log("in create park fun")
+    var selectedDestination = $("<div>");
+    $(selectedDestination).text(obj.destination);
+    $(selectedDestination).attr("class", "alert alert-light col-lg-12").attr("id", "destination-alert");
+    $("form").append(selectedDestination);
+}
+
+
+function leafletAPICall(obj) {
+    //I want the "selected destination" to be the input in the ajax call, but i can't get it to work yet, so currently "searchTerm" is set to equal "Yellowstone National Park"
+    console.log("in leaflet api all", obj);
+    var searchTerm = obj.destination;
+
+    var searchQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json?inputtype=textquery&input=" + searchTerm + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk";
+
+    $.ajax({
+        url: searchQueryURL,
+        method: "GET"
+    }).then(function (response) {
+        var placeID = response.candidates[0].place_id;
+        console.log("first ajax");
+        console.log(response);
+        console.log(placeID);
+        var geocodeQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk"
+        $.ajax({
+            url: geocodeQueryURL,
+            method: "GET"
+        }).then(function (response) {
+            var latitude = response.result.geometry.location.lat;
+            var longitude = response.result.geometry.location.lng;
+            console.log("nested ajax")
+            var myMap = L.map('mapid').setView([latitude, longitude], 10);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(myMap);
+
+            L.marker([latitude, longitude]).addTo(myMap);
+        });
+    });
+}
 
 // jQuery plugin for the date range found here "http://www.daterangepicker.com/"
 $(function () {
@@ -288,7 +298,7 @@ $(function () {
 function fillDestinationDropDown(arr) {
     for (var i = 0; i < arr.length; i++) {
         var newAnchor = $("<a>");
-        newAnchor.attr("parkID", arr[i].parkID).attr("park-name", arr[i].name).addClass("dropdown-item").text(arr[i].name);
+        newAnchor.attr("parkID", arr[i].parkID).attr("park-name", arr[i].name).addClass("dropdown-item park-item").text(arr[i].name);
         $("#park-dropdown").append(newAnchor);
     }
 }
@@ -298,9 +308,9 @@ function fillTripDropDown() {
         var sv = snapshot.val();
         for (var tripID in sv) {
             var newAnchor = $("<a>");
-            newAnchor.attr("trip-name", sv[tripID].tripName).addClass("trip-item");
+            newAnchor.attr("trip-name", sv[tripID].tripName).addClass("trip-item dropdown-item").text(sv[tripID].tripName);
             console.log(sv[tripID].tripName);
-            $("#my-trips").append(newAnchor);
+            $("#trip-item").append(newAnchor);
         }
     });
 }
@@ -369,11 +379,12 @@ function populateAnimalList(obj) {
 
 function pushAnimalList(obj) {
     console.log("in pushAnmialsList", obj.tripName);
-    database.ref(obj.tripName).push({
+    database.ref(obj.tripName).set({
         tripName: obj.tripName,
         startDate: obj.startDate,
         endDate: obj.endDate,
         animalArray: obj.animalArray,
+        destination: obj.destination,
         dataAdded: firebase.database.ServerValue.TIMESTAMP
     });
 }
