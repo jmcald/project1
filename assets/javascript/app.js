@@ -287,7 +287,7 @@ $(function () {
         trip.endDate = end.format('MM-DD-YYYY');
     });
 });
-
+// Fills in the destination dropdrown menu with the array above.
 function fillDestinationDropDown(arr) {
     for (var i = 0; i < arr.length; i++) {
         var newAnchor = $("<a>");
@@ -306,7 +306,7 @@ function fillTripDropDown() {
         }
     });
 }
-
+// Returns a list of days from the user's input. For iNat API
 function returnDays(startD, endD) {
     var sDate = moment(startD);
     var eDate = moment(endD);
@@ -318,7 +318,7 @@ function returnDays(startD, endD) {
     }
     return days.join('%2C');
 }
-
+// Returns a list of month from the user's input. For iNat API
 function returnMonths(startM, endM) {
     var sMonth = moment(startM);
     var eMonth = moment(endM);
@@ -330,18 +330,19 @@ function returnMonths(startM, endM) {
     }
     return months.join('%2C');
 }
-
+// Pushes list of Animals to the Database
 function pushAnimalList(obj) {
-    console.log("in pushAnimalsList", obj);
-    database.ref(obj.tripName).push({
-        name: obj.name,
-        taxonName: obj.taxonName,
-        imgURL: obj.imgURL,
-        wikiLink: obj.wikiLink,
+    console.log("in pushAnmialsList", obj.tripName);
+    database.ref(obj.tripName).set({
+        tripName: obj.tripName,
+        startDate: obj.startDate,
+        endDate: obj.endDate,
+        destination: obj.destination,
+        animalArray: obj.animalArray,
         dataAdded: firebase.database.ServerValue.TIMESTAMP
     });
 }
-
+// Populates animals list on the DOM.
 function populateAnimalList(obj) {
     console.log("in populateAnimalsList", "object: ", obj);
     var animalObjAry = obj.animalArray;
@@ -365,18 +366,6 @@ function populateAnimalList(obj) {
         );
         $("#animal-list").append(newLi);
     }
-}
-
-function pushAnimalList(obj) {
-    console.log("in pushAnmialsList", obj.tripName);
-    database.ref(obj.tripName).set({
-        tripName: obj.tripName,
-        startDate: obj.startDate,
-        endDate: obj.endDate,
-        animalArray: obj.animalArray,
-        destination: obj.destination,
-        dataAdded: firebase.database.ServerValue.TIMESTAMP
-    });
 }
 
 function iNatAPI(trip) {
