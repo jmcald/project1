@@ -334,22 +334,22 @@ $(document).ready(function () {
 
         var searchTerm = trip.destination
 
-        var searchQueryURL ="https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json?inputtype=textquery&input=" + searchTerm + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk"
+        var searchQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json?inputtype=textquery&input=" + searchTerm + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk"
         console.log(searchQueryURL)
 
         $.ajax({
             url: searchQueryURL,
             method: "GET"
-        }).then(function(response) {
+        }).then(function (response) {
             var placeID = response.candidates[0].place_id
             console.log("first ajax")
             console.log(response);
             console.log(placeID);
-            var geocodeQueryURL ="https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk"
+            var geocodeQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk"
             $.ajax({
                 url: geocodeQueryURL,
                 method: "GET"
-            }).then(function(response) {
+            }).then(function (response) {
                 var latitude = response.result.geometry.location.lat
                 var longitude = response.result.geometry.location.lng
                 console.log("nested ajax")
@@ -358,12 +358,12 @@ $(document).ready(function () {
                 console.log(response);
                 var myMap = L.map('mapid').setView([latitude, longitude], 10);
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 }).addTo(myMap);
-                
+
                 L.marker([latitude, longitude]).addTo(myMap);
             });
-          });
+        });
 
     });
 
@@ -373,7 +373,7 @@ $(document).ready(function () {
         iNatAPI(trip);
     });
 
-    database.ref("animal-list").on("child_added", function(snapshot){
+    database.ref("animal-list").on("child_added", function (snapshot) {
         var sv = snapshot.val();
         populateAnimalList(sv);
     });
@@ -402,3 +402,4 @@ function populateDestinations(arr) {
         newAnchor.attr("parkID", arr[i].parkID).attr("park-name", arr[i].name).addClass("dropdown-item").text(arr[i].name);
         $("#park-dropdown").append(newAnchor);
     }
+}
