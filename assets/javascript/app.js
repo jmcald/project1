@@ -199,14 +199,11 @@ var trip = {
 
 $(document).ready(function () {
     fillDestinationDropDown(destinationArr);
-
-    // $(document).on("click", ".dropdown-item", function () {
-    //     trip.destination = $(this).attr("park-name");
-    //     console.log(trip.destination);
-    // });
+    // fillTripDropDown();
 
     $("#btn-submit").on("click", function (event) {
         console.log("clicked button");
+        $("#animal-list").empty();
         event.preventDefault();
         trip.tripName = $("#trip-name").val().trim();
         $("#trip-name").val("");
@@ -216,7 +213,16 @@ $(document).ready(function () {
             tripName: trip.tripName,
         });
     });
-    populateDestinations(destinationArr);
+
+    $(document).on("click", ".trip-item", function () {
+        $("#animal-list").empty();
+        var animalObj = $(this).attr("trip-name");
+        database.ref(animalObj).on("value", function (snapshot) {
+            var sv = snapshot.val();
+            console.log("from trip", sv);
+            populateAnimalList(sv);
+        });
+    });
 
     $(document).on("click", ".dropdown-item", function () {
         trip.destination = $(this).attr("park-name");
@@ -290,10 +296,13 @@ function fillDestinationDropDown(arr) {
 function fillTripDropDown() {
     database.ref("trip-list").on("value", function (snapshot) {
         var sv = snapshot.val();
-        var newAnchor = $("<a>");
-        newAnchor.attr("tripName", sv.tripName);
+        for (var tripID in sv) {
+            var newAnchor = $("<a>");
+            newAnchor.attr("trip-name", sv[tripID].tripName).addClass("trip-item");
+            console.log(sv[tripID].tripName);
+            $("#my-trips").append(newAnchor);
+        }
     });
-
 }
 
 function returnDays(startD, endD) {
@@ -320,7 +329,6 @@ function returnMonths(startM, endM) {
     }
     console.log("months", months);
     return months.join('%2C');
-
 }
 
 function pushAnimalList(obj) {
@@ -403,23 +411,4 @@ function iNatAPI(trip) {
         pushAnimalList(trip);
         populateAnimalList(trip);
     });
-}
-
-// jQuery plugin for the date range found here "http://www.daterangepicker.com/"
-$(function () {
-    $('input[name="daterange"').daterangepicker({
-        opens: 'right'
-    }, function (start, end) {
-        trip.startDate = start.format('MM-DD-YYYY');
-        trip.endDate = end.format('MM-DD-YYYY');
-        console.log(trip.startDate, trip.endDate);
-    });
-});
-
-function populateDestinations(arr) {
-    for (var i = 0; i < arr.length; i++) {
-        var newAnchor = $("<a>");
-        newAnchor.attr("parkID", arr[i].parkID).attr("park-name", arr[i].name).addClass("dropdown-item").text(arr[i].name);
-        $("#park-dropdown").append(newAnchor);
-    }
 }
