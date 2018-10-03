@@ -220,27 +220,21 @@ $(document).ready(function () {
         database.ref(tripName).on("value", function (snapshot) {
             var sv = snapshot.val();
             console.log("from trip", sv);
-            populateAnimalList(sv);
-            trip.tripName = sv.tripName;
-            trip.startDate = sv.startDate;
-            trip.endDate = sv.endDate;
-            trip.destination = sv.destination;
-            trip.animalArray = sv.animalArray;
-            console.log(trip);
-            $("#destination-alert").empty();
             createParkInfoDiv(sv);
             leafletAPICall(sv);
+            populateAnimalList(sv);
         });
     });
 
     $(document).on("click", ".park-item", function () {
         trip.destination = $(this).attr("park-name");
         console.log(trip.destination);
-        createParkInfoDiv();
-        leafletAPICall();
+        createParkInfoDiv(trip);
+        leafletAPICall(trip);
 
     });
 });
+
 //I added a space so users can see their selection after they choose their destination; we can definately move/remove it
 function createParkInfoDiv(obj) {
     console.log("in create park fun")
@@ -249,7 +243,6 @@ function createParkInfoDiv(obj) {
     $(selectedDestination).attr("class", "alert alert-light col-lg-12").attr("id", "destination-alert");
     $("form").append(selectedDestination);
 }
-
 
 function leafletAPICall(obj) {
     //I want the "selected destination" to be the input in the ajax call, but i can't get it to work yet, so currently "searchTerm" is set to equal "Yellowstone National Park"
@@ -291,7 +284,6 @@ $(function () {
     }, function (start, end) {
         trip.startDate = start.format('MM-DD-YYYY');
         trip.endDate = end.format('MM-DD-YYYY');
-        console.log(trip.startDate, trip.endDate);
     });
 });
 
@@ -309,7 +301,6 @@ function fillTripDropDown() {
         for (var tripID in sv) {
             var newAnchor = $("<a>");
             newAnchor.attr("trip-name", sv[tripID].tripName).addClass("trip-item dropdown-item").text(sv[tripID].tripName);
-            console.log(sv[tripID].tripName);
             $("#trip-item").append(newAnchor);
         }
     });
@@ -324,7 +315,6 @@ function returnDays(startD, endD) {
         days.push(day);
         sDate = moment(sDate).add(1, "d");
     }
-    console.log(days);
     return days.join('%2C');
 }
 
@@ -337,7 +327,6 @@ function returnMonths(startM, endM) {
         months.push(month);
         sMonth = moment(sMonth).add(1, "M");
     }
-    console.log("months", months);
     return months.join('%2C');
 }
 
@@ -404,7 +393,6 @@ function iNatAPI(trip) {
         url: queryURL,
         method: "GET"
     }).then(function (response) {
-        console.log("i nat response: ", response);
         var res = response.results;
         for (var i = 0; i < res.length; i++) {
             var animalObj = {
@@ -418,7 +406,6 @@ function iNatAPI(trip) {
             console.log(trip);
         }
         // pushing animal list to firebase
-        console.log("out of for loop");
         pushAnimalList(trip);
         populateAnimalList(trip);
     });
