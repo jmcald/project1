@@ -398,7 +398,7 @@ function populateAnimalList(obj) {
     for (var i = 1; i <= animalObjAry.length; i++) {
         var newLi = $("<li>");
         var newImg = $("<img>");
-        newImg.addClass("mr-3 thumbnail").attr("src", animalObjAry[i].imgURL).attr("alt", animalObjAry[i].name);
+        newImg.addClass("mr-3 thumbnail").attr("src", animalObjAry[i].imgURL).attr("alt", animalObjAry[i].name).attr("style", "min-width: 65px;");
         var newDiv = $("<div>");
         newDiv.addClass("media-body");
         var newH5 = $("<h5>");
