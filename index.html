@@ -54,27 +54,14 @@
                         </div>
                     </div>
                     <button type="button" class="btn btn-success" title="Submit to start your adventure!" id="btn-submit">Submit</button>
-                    <div class="dropright">
-                        <label for="trips-dropdown">My Previous Trips</label>
-                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="You can view all of your previous trips here!">Previous Trips</button>
-                        <div class="dropdown-menu" data-boundary="scrollParent" aria-labelledby="dropdownMenubutton" id="trip-item"></div>
-                    </div>
-                    <div id="alert-div"></div>
+                    <button type="button" class="btn btn-success" title="Click to clear this adventure and start a new one!"
+                        id="btn-refresh">New Search</button>
                 </form>
             </div>
 
             <div id="left-content" class="col-lg-6 col-md-6 col-sm-12">
-                <!-- This will be the checklist of animals returned from the iNaturalist API / Limit 15 -->
-                <div id="new-search"></div>
-                <!-- This will be a button saving a user's finished trip and starting a new one -->
-                <div id="my-trips"></div>
-                <!-- This will be where previous trips are stored -->
-
                 <div id="mapid">
-
                     <!--This is where the map goes, it can easily be moved to wherever we want it-->
-
                 </div>
             </div>
         </div>
@@ -87,9 +74,13 @@
                     <ul id="animal-list" class="list-unstyled">
                     </ul>
                 </div>
-                <div id="discovered-animal"></div>
-                <div id="place-found"></div>
-                <div id="date-found"></div>
+                <div class="dropright">
+                    <label for="trips-dropdown"><i class="fas fa-trophy"></i> Click to view your previous trips!</label>
+                    <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false" title="You can view all of your previous trips here!">Previous
+                        Trips</button>
+                    <div class="dropdown-menu" data-boundary="scrollParent" aria-labelledby="dropdownMenubutton" id="trip-item"></div>
+                </div>
             </div>
         </div>
 
