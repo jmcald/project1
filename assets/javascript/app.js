@@ -189,6 +189,8 @@ var destinationArr = [
         name: "Zion National Park"
     }
 ];
+
+// An array for saving each trip's information
 var trip = {
     tripName: "",
     startDate: "",
@@ -197,6 +199,7 @@ var trip = {
     animalArray: [{}],
 };
 
+// The key function; It fills the dropdown menus and handles the on-click functions
 $(document).ready(function () {
     fillDestinationDropDown(destinationArr);
     fillTripDropDown();
@@ -208,6 +211,11 @@ $(document).ready(function () {
 
     $("#btn-submit").on("click", function (event) {
         console.log("clicked button");
+
+    $("#btn-submit").on("click", function (event) {
+        console.log("clicked button");
+        $("#animal-list").empty();
+
         event.preventDefault();
         trip.tripName = $("#trip-name").val().trim();
         $("#trip-name").val("");
@@ -267,7 +275,76 @@ $(document).ready(function () {
 
     });
 
+    $(document).on("click", ".trip-item", function () {
+        $("#animal-list").empty();
+        var tripName = $(this).attr("trip-name");
+        database.ref(tripName).on("value", function (snapshot) {
+            var sv = snapshot.val();
+            console.log("from trip", sv);
+            createParkInfoDiv(sv);
+            mapReset(sv);
+            populateAnimalList(sv);
+        });
+    });
+
+    $(document).on("click", ".park-item", function () {
+        trip.destination = $(this).attr("park-name");
+        console.log(trip.destination);
+        createParkInfoDiv(trip);
+        mapReset(trip);
+
+    });
 });
+
+function createParkInfoDiv(obj) {
+    $("#alert-div").empty();
+    console.log("in create park fun")
+    var selectedDestination = $("<div>");
+    $(selectedDestination).text(obj.destination);
+    $(selectedDestination).attr("class", "alert alert-light col-lg-12").attr("id", "destination-alert");
+    $("#alert-div").append(selectedDestination);
+}
+
+// This function handles the API call to Google Places API; this takes the saved obj.destination and hands it to the API twice in order to get coordinates. The coordinates are then put into a Leaflet.js map.
+function leafletAPICall(obj) {
+    console.log("in leaflet api all", obj);
+    var searchTerm = obj.destination;
+
+    var searchQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json?inputtype=textquery&input=" + searchTerm + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk";
+
+    $.ajax({
+        url: searchQueryURL,
+        method: "GET"
+    }).then(function (response) {
+        var placeID = response.candidates[0].place_id;
+        var geocodeQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk"
+        $.ajax({
+            url: geocodeQueryURL,
+            method: "GET"
+        }).then(function (response) {
+            var latitude = response.result.geometry.location.lat;
+            var longitude = response.result.geometry.location.lng;
+            console.log(latitude);
+            console.log(longitude);
+            var myMap = L.map('mapid', {scrollWheelZoom: false}).setView([latitude, longitude], 10);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(myMap);
+
+            L.marker([latitude, longitude]).addTo(myMap);
+        });
+    });
+}
+
+// This function was added to help reset the map
+function mapReset(a) {
+    $("#mapid").remove();
+    console.log("remove");
+    var newMap = $("<div>");
+    newMap.attr("id", "mapid");
+    $("#left-content").append(newMap);
+    leafletAPICall(a);
+}
 
 // jQuery plugin for the date range found here "http://www.daterangepicker.com/"
 $(function () {
@@ -276,14 +353,13 @@ $(function () {
     }, function (start, end) {
         trip.startDate = start.format('MM-DD-YYYY');
         trip.endDate = end.format('MM-DD-YYYY');
-        console.log(trip.startDate, trip.endDate);
     });
 });
-
+// Fills in the destination dropdrown menu with the array above.
 function fillDestinationDropDown(arr) {
     for (var i = 0; i < arr.length; i++) {
         var newAnchor = $("<a>");
-        newAnchor.attr("parkID", arr[i].parkID).attr("park-name", arr[i].name).addClass("dropdown-item").text(arr[i].name);
+        newAnchor.attr("parkID", arr[i].parkID).attr("park-name", arr[i].name).addClass("dropdown-item park-item").text(arr[i].name);
         $("#park-dropdown").append(newAnchor);
     }
 }
@@ -295,12 +371,14 @@ function fillTripDropDown() {
         for (var tripID in sv) {
             var newAnchor = $("<a>");
             newAnchor.attr("trip-name", sv[tripID].tripName).addClass("trip-item dropdown-item").text(sv[tripID].tripName);
+
             console.log(sv[tripID].tripName);
+
             $("#trip-item").append(newAnchor);
         }
     });
 }
-
+// Returns a list of days from the user's input. For iNat API
 function returnDays(startD, endD) {
     var sDate = moment(startD);
     var eDate = moment(endD);
@@ -310,10 +388,9 @@ function returnDays(startD, endD) {
         days.push(day);
         sDate = moment(sDate).add(1, "d");
     }
-    console.log(days);
     return days.join('%2C');
 }
-
+// Returns a list of month from the user's input. For iNat API
 function returnMonths(startM, endM) {
     var sMonth = moment(startM);
     var eMonth = moment(endM);
@@ -323,22 +400,21 @@ function returnMonths(startM, endM) {
         months.push(month);
         sMonth = moment(sMonth).add(1, "M");
     }
-    console.log("months", months);
     return months.join('%2C');
-
 }
-
+// Pushes list of Animals to the Database
 function pushAnimalList(obj) {
-    console.log("in pushAnimalsList", obj);
-    database.ref(obj.tripName).push({
-        name: obj.name,
-        taxonName: obj.taxonName,
-        imgURL: obj.imgURL,
-        wikiLink: obj.wikiLink,
+    console.log("in pushAnmialsList", obj.tripName);
+    database.ref(obj.tripName).set({
+        tripName: obj.tripName,
+        startDate: obj.startDate,
+        endDate: obj.endDate,
+        destination: obj.destination,
+        animalArray: obj.animalArray,
         dataAdded: firebase.database.ServerValue.TIMESTAMP
     });
 }
-
+// Populates animals list on the DOM.
 function populateAnimalList(obj) {
     console.log("in populateAnimalsList", "object: ", obj);
     var animalObjAry = obj.animalArray;
@@ -373,6 +449,7 @@ function pushAnimalList(obj) {
         animalArray: obj.animalArray,
         dataAdded: firebase.database.ServerValue.TIMESTAMP
     });
+
 }
 
 function iNatAPI(trip) {
@@ -390,7 +467,9 @@ function iNatAPI(trip) {
         url: queryURL,
         method: "GET"
     }).then(function (response) {
+
         console.log("i nat response: ", response);
+
         var res = response.results;
         for (var i = 0; i < res.length; i++) {
             var animalObj = {
@@ -404,22 +483,12 @@ function iNatAPI(trip) {
             console.log(trip);
         }
         // pushing animal list to firebase
+
         console.log("out of for loop");
         pushAnimalList(trip);
         populateAnimalList(trip);
     });
 }
-
-// jQuery plugin for the date range found here "http://www.daterangepicker.com/"
-$(function () {
-    $('input[name="daterange"').daterangepicker({
-        opens: 'right'
-    }, function (start, end) {
-        trip.startDate = start.format('MM-DD-YYYY');
-        trip.endDate = end.format('MM-DD-YYYY');
-        console.log(trip.startDate, trip.endDate);
-    });
-});
 
 function populateDestinations(arr) {
     for (var i = 0; i < arr.length; i++) {
