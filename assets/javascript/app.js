@@ -203,25 +203,9 @@ var trip = {
 $(document).ready(function () {
     fillDestinationDropDown(destinationArr);
     fillTripDropDown();
-<<<<<<< HEAD
-
-    // $(document).on("click", ".dropdown-item", function () {
-    //     trip.destination = $(this).attr("park-name");
-    //     console.log(trip.destination);
-    // });
-
-    $("#btn-submit").on("click", function (event) {
-        console.log("clicked button");
-
-    $("#btn-submit").on("click", function (event) {
-        console.log("clicked button");
-        $("#animal-list").empty();
-
-=======
 
     $("#btn-submit").on("click", function (event) {
         $("#animal-list").empty();
->>>>>>> ryan-new
         event.preventDefault();
         trip.tripName = $("#trip-name").val().trim();
         $("#trip-name").val("");
@@ -242,17 +226,10 @@ $(document).ready(function () {
         });
     });
 
-<<<<<<< HEAD
-        var selectedDestination = $("<div>");
-        $(selectedDestination).text(trip.destination);
-        $(selectedDestination).attr("class", "alert alert-success text-dark col-lg-12");
-        $("form").append(selectedDestination);
-=======
     $(document).on("click", ".park-item", function () {
         trip.destination = $(this).attr("park-name");
         createParkInfoDiv(trip);
         leafletAPICall(trip);
->>>>>>> ryan-new
 
     });
 });
@@ -293,29 +270,6 @@ function leafletAPICall(obj) {
             L.marker([latitude, longitude]).addTo(myMap);
         });
     });
-<<<<<<< HEAD
-
-    $(document).on("click", ".trip-item", function () {
-        $("#animal-list").empty();
-        var tripName = $(this).attr("trip-name");
-        database.ref(tripName).on("value", function (snapshot) {
-            var sv = snapshot.val();
-            console.log("from trip", sv);
-            createParkInfoDiv(sv);
-            mapReset(sv);
-            populateAnimalList(sv);
-        });
-    });
-
-    $(document).on("click", ".park-item", function () {
-        trip.destination = $(this).attr("park-name");
-        console.log(trip.destination);
-        createParkInfoDiv(trip);
-        mapReset(trip);
-
-    });
-});
-=======
 }
 // This function was added to help reset the map
 function mapReset(a) {
@@ -325,7 +279,6 @@ function mapReset(a) {
     $("#left-content").append(newMap);
     leafletAPICall(a);
 }
->>>>>>> ryan-new
 
 function createParkInfoDiv(obj) {
     $("#alert-div").empty();
@@ -403,12 +356,6 @@ function fillTripDropDown() {
         for (var tripID in sv) {
             var newAnchor = $("<a>");
             newAnchor.attr("trip-name", sv[tripID].tripName).addClass("trip-item dropdown-item").text(sv[tripID].tripName);
-<<<<<<< HEAD
-
-            console.log(sv[tripID].tripName);
-
-=======
->>>>>>> ryan-new
             $("#trip-item").append(newAnchor);
         }
     });
@@ -439,10 +386,6 @@ function returnMonths(startM, endM) {
 }
 // Pushes list of Animals to the Database
 function pushAnimalList(obj) {
-<<<<<<< HEAD
-    console.log("in pushAnmialsList", obj.tripName);
-=======
->>>>>>> ryan-new
     database.ref(obj.tripName).set({
         tripName: obj.tripName,
         startDate: obj.startDate,
@@ -477,21 +420,6 @@ function populateAnimalList(obj) {
     }
 }
 
-<<<<<<< HEAD
-function pushAnimalList(obj) {
-    console.log("in pushAnmialsList", obj.tripName);
-    database.ref(obj.tripName).push({
-        tripName: obj.tripName,
-        startDate: obj.startDate,
-        endDate: obj.endDate,
-        animalArray: obj.animalArray,
-        dataAdded: firebase.database.ServerValue.TIMESTAMP
-    });
-
-}
-
-=======
->>>>>>> ryan-new
 function iNatAPI(trip) {
     var popular = true;
     var photos = true;
@@ -507,12 +435,6 @@ function iNatAPI(trip) {
         url: queryURL,
         method: "GET"
     }).then(function (response) {
-<<<<<<< HEAD
-
-        console.log("i nat response: ", response);
-
-=======
->>>>>>> ryan-new
         var res = response.results;
         for (var i = 0; i < res.length; i++) {
             var animalObj = {
@@ -525,16 +447,10 @@ function iNatAPI(trip) {
             trip.animalArray.push(animalObj);
         }
         // pushing animal list to firebase
-<<<<<<< HEAD
-
-        console.log("out of for loop");
-=======
->>>>>>> ryan-new
         pushAnimalList(trip);
         populateAnimalList(trip);
     });
 }
-<<<<<<< HEAD
 
 function populateDestinations(arr) {
     for (var i = 0; i < arr.length; i++) {
@@ -545,8 +461,5 @@ function populateDestinations(arr) {
 }
 
 $("#btn-refresh").on("click", function() {
-=======
-$("#btn-refresh").on("click", function () {
->>>>>>> ryan-new
     window.location.reload();
 });
