@@ -440,18 +440,6 @@ function populateAnimalList(obj) {
     }
 }
 
-function pushAnimalList(obj) {
-    console.log("in pushAnmialsList", obj.tripName);
-    database.ref(obj.tripName).push({
-        tripName: obj.tripName,
-        startDate: obj.startDate,
-        endDate: obj.endDate,
-        animalArray: obj.animalArray,
-        dataAdded: firebase.database.ServerValue.TIMESTAMP
-    });
-
-}
-
 function iNatAPI(trip) {
     var popular = true;
     var photos = true;
