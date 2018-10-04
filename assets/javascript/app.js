@@ -350,8 +350,8 @@ function fillDestinationDropDown(arr) {
 
 // This will populate the trip drop down menu
 function fillTripDropDown() {
-    $("#trip-item").empty();
     database.ref("trip-list").on("value", function (snapshot) {
+        $("#trip-item").empty();
         var sv = snapshot.val();
         for (var tripID in sv) {
             var newAnchor = $("<a>");
