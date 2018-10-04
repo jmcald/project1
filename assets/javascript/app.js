@@ -257,9 +257,6 @@ function leafletAPICall(obj) {
         method: "GET"
     }).then(function (response) {
         var placeID = response.candidates[0].place_id;
-        console.log("first ajax");
-        console.log(response);
-        console.log(placeID);
         var geocodeQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk"
         $.ajax({
             url: geocodeQueryURL,
@@ -298,7 +295,6 @@ $(function () {
 });
 // Fills in the destination dropdrown menu with the array above.
 function fillDestinationDropDown(arr) {
-    $("#park-dropdown").empty();
     for (var i = 0; i < arr.length; i++) {
         var newAnchor = $("<a>");
         newAnchor.attr("parkID", arr[i].parkID).attr("park-name", arr[i].name).addClass("dropdown-item park-item").text(arr[i].name);
@@ -307,6 +303,8 @@ function fillDestinationDropDown(arr) {
 }
 // This will populate the trip drop down menu
 function fillTripDropDown() {
+    console.log("filling trip dropdown");
+    $("#trip-item").empty();
     database.ref("trip-list").on("value", function (snapshot) {
         var sv = snapshot.val();
         for (var tripID in sv) {
@@ -410,3 +408,6 @@ function iNatAPI(trip) {
         populateAnimalList(trip);
     });
 }
+$("#btn-refresh").on("click", function() {
+    window.location.reload();
+});
