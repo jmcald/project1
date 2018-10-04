@@ -282,7 +282,6 @@ function mapReset(a) {
 
 function createParkInfoDiv(obj) {
     $("#alert-div").empty();
-    console.log("in create park fun")
     var selectedDestination = $("<div>");
     $(selectedDestination).text(obj.destination);
     $(selectedDestination).attr("class", "alert alert-light col-lg-12").attr("id", "destination-alert");
@@ -291,7 +290,6 @@ function createParkInfoDiv(obj) {
 
 // This function handles the API call to Google Places API; this takes the saved obj.destination and hands it to the API twice in order to get coordinates. The coordinates are then put into a Leaflet.js map.
 function leafletAPICall(obj) {
-    console.log("in leaflet api all", obj);
     var searchTerm = obj.destination;
 
     var searchQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json?inputtype=textquery&input=" + searchTerm + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk";
@@ -323,7 +321,6 @@ function leafletAPICall(obj) {
 // This function was added to help reset the map
 function mapReset(a) {
     $("#mapid").remove();
-    console.log("remove");
     var newMap = $("<div>");
     newMap.attr("id", "mapid");
     $("#left-content").append(newMap);
@@ -350,8 +347,8 @@ function fillDestinationDropDown(arr) {
 
 // This will populate the trip drop down menu
 function fillTripDropDown() {
-    $("#trip-item").empty();
     database.ref("trip-list").on("value", function (snapshot) {
+        $("#trip-item").empty();
         var sv = snapshot.val();
         for (var tripID in sv) {
             var newAnchor = $("<a>");
