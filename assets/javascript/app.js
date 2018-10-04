@@ -204,9 +204,18 @@ $(document).ready(function () {
     fillDestinationDropDown(destinationArr);
     fillTripDropDown();
 
+    // $(document).on("click", ".dropdown-item", function () {
+    //     trip.destination = $(this).attr("park-name");
+    //     console.log(trip.destination);
+    // });
+
+    $("#btn-submit").on("click", function (event) {
+        console.log("clicked button");
+
     $("#btn-submit").on("click", function (event) {
         console.log("clicked button");
         $("#animal-list").empty();
+
         event.preventDefault();
         trip.tripName = $("#trip-name").val().trim();
         $("#trip-name").val("");
@@ -215,6 +224,55 @@ $(document).ready(function () {
         database.ref("trip-list").push({
             tripName: trip.tripName,
         });
+    });
+    populateDestinations(destinationArr);
+
+    $(document).on("click", ".dropdown-item", function () {
+        trip.destination = $(this).attr("park-name");
+        console.log(trip.destination);
+
+        //I added a space so users can see their selection after they choose their destination; we can definately move/remove it
+
+        var selectedDestination = $("<div>");
+        $(selectedDestination).text(trip.destination);
+        $(selectedDestination).attr("class", "alert alert-success text-dark col-lg-12");
+        $("form").append(selectedDestination);
+
+        //I want the "selected destination" to be the input in the ajax call, but i can't get it to work yet, so currently "searchTerm" is set to equal "Yellowstone National Park"
+
+        var searchTerm = trip.destination;
+
+        var searchQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json?inputtype=textquery&input=" + searchTerm + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk";
+        console.log(searchQueryURL);
+
+        $.ajax({
+            url: searchQueryURL,
+            method: "GET"
+        }).then(function (response) {
+            var placeID = response.candidates[0].place_id;
+            console.log("first ajax");
+            console.log(response);
+            console.log(placeID);
+            var geocodeQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk"
+            $.ajax({
+                url: geocodeQueryURL,
+                method: "GET"
+            }).then(function (response) {
+                var latitude = response.result.geometry.location.lat
+                var longitude = response.result.geometry.location.lng
+                console.log("nested ajax")
+                console.log(latitude)
+                console.log(longitude)
+                console.log(response);
+                var myMap = L.map('mapid').setView([latitude, longitude], 10);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(myMap);
+
+                L.marker([latitude, longitude]).addTo(myMap);
+            });
+        });
+
     });
 
     $(document).on("click", ".trip-item", function () {
@@ -305,6 +363,7 @@ function fillDestinationDropDown(arr) {
         $("#park-dropdown").append(newAnchor);
     }
 }
+
 // This will populate the trip drop down menu
 function fillTripDropDown() {
     database.ref("trip-list").on("value", function (snapshot) {
@@ -312,6 +371,9 @@ function fillTripDropDown() {
         for (var tripID in sv) {
             var newAnchor = $("<a>");
             newAnchor.attr("trip-name", sv[tripID].tripName).addClass("trip-item dropdown-item").text(sv[tripID].tripName);
+
+            console.log(sv[tripID].tripName);
+
             $("#trip-item").append(newAnchor);
         }
     });
@@ -378,6 +440,18 @@ function populateAnimalList(obj) {
     }
 }
 
+function pushAnimalList(obj) {
+    console.log("in pushAnmialsList", obj.tripName);
+    database.ref(obj.tripName).push({
+        tripName: obj.tripName,
+        startDate: obj.startDate,
+        endDate: obj.endDate,
+        animalArray: obj.animalArray,
+        dataAdded: firebase.database.ServerValue.TIMESTAMP
+    });
+
+}
+
 function iNatAPI(trip) {
     var popular = true;
     var photos = true;
@@ -393,6 +467,9 @@ function iNatAPI(trip) {
         url: queryURL,
         method: "GET"
     }).then(function (response) {
+
+        console.log("i nat response: ", response);
+
         var res = response.results;
         for (var i = 0; i < res.length; i++) {
             var animalObj = {
@@ -406,7 +483,21 @@ function iNatAPI(trip) {
             console.log(trip);
         }
         // pushing animal list to firebase
+
+        console.log("out of for loop");
         pushAnimalList(trip);
         populateAnimalList(trip);
     });
 }
+
+function populateDestinations(arr) {
+    for (var i = 0; i < arr.length; i++) {
+        var newAnchor = $("<a>");
+        newAnchor.attr("parkID", arr[i].parkID).attr("park-name", arr[i].name).addClass("dropdown-item").text(arr[i].name);
+        $("#park-dropdown").append(newAnchor);
+    }
+}
+
+$("#btn-refresh").on("click", function() {
+    window.location.reload();
+});
