@@ -202,12 +202,10 @@ $(document).ready(function () {
     fillTripDropDown();
 
     $("#btn-submit").on("click", function (event) {
-        console.log("clicked button");
         $("#animal-list").empty();
         event.preventDefault();
         trip.tripName = $("#trip-name").val().trim();
         $("#trip-name").val("");
-        console.log(trip);
         iNatAPI(trip);
         database.ref("trip-list").push({
             tripName: trip.tripName,
@@ -219,7 +217,6 @@ $(document).ready(function () {
         var tripName = $(this).attr("trip-name");
         database.ref(tripName).on("value", function (snapshot) {
             var sv = snapshot.val();
-            console.log("from trip", sv);
             createParkInfoDiv(sv);
             mapReset(sv);
             populateAnimalList(sv);
@@ -228,7 +225,6 @@ $(document).ready(function () {
 
     $(document).on("click", ".park-item", function () {
         trip.destination = $(this).attr("park-name");
-        console.log(trip.destination);
         createParkInfoDiv(trip);
         leafletAPICall(trip);
 
@@ -238,7 +234,6 @@ $(document).ready(function () {
 //I added a space so users can see their selection after they choose their destination; we can definately move/remove it
 function createParkInfoDiv(obj) {
     $("#alert-div").empty();
-    console.log("in create park fun")
     var selectedDestination = $("<div>");
     $(selectedDestination).text(obj.destination);
     $(selectedDestination).attr("class", "alert alert-light col-lg-12").attr("id", "destination-alert");
@@ -247,24 +242,23 @@ function createParkInfoDiv(obj) {
 
 function leafletAPICall(obj) {
     //I want the "selected destination" to be the input in the ajax call, but i can't get it to work yet, so currently "searchTerm" is set to equal "Yellowstone National Park"
-    console.log("in leaflet api all", obj);
     var searchTerm = obj.destination;
 
     var searchQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json?inputtype=textquery&input=" + searchTerm + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk";
-
+    console.log(searchQueryURL);
     $.ajax({
         url: searchQueryURL,
         method: "GET"
     }).then(function (response) {
         var placeID = response.candidates[0].place_id;
         var geocodeQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk"
+        console.log(geocodeQueryURL);
         $.ajax({
             url: geocodeQueryURL,
             method: "GET"
         }).then(function (response) {
             var latitude = response.result.geometry.location.lat;
             var longitude = response.result.geometry.location.lng;
-            console.log("nested ajax")
             var myMap = L.map('mapid').setView([latitude, longitude], 10);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -277,7 +271,6 @@ function leafletAPICall(obj) {
 // This function was added to help reset the map
 function mapReset(a) {
     $("#mapid").remove();
-    console.log("remove");
     var newMap = $("<div>");
     newMap.attr("id", "mapid");
     $("#left-content").append(newMap);
@@ -303,7 +296,6 @@ function fillDestinationDropDown(arr) {
 }
 // This will populate the trip drop down menu
 function fillTripDropDown() {
-    console.log("filling trip dropdown");
     $("#trip-item").empty();
     database.ref("trip-list").on("value", function (snapshot) {
         var sv = snapshot.val();
@@ -340,7 +332,6 @@ function returnMonths(startM, endM) {
 }
 // Pushes list of Animals to the Database
 function pushAnimalList(obj) {
-    console.log("in pushAnmialsList", obj.tripName);
     database.ref(obj.tripName).set({
         tripName: obj.tripName,
         startDate: obj.startDate,
@@ -352,7 +343,6 @@ function pushAnimalList(obj) {
 }
 // Populates animals list on the DOM.
 function populateAnimalList(obj) {
-    console.log("in populateAnimalsList", "object: ", obj);
     var animalObjAry = obj.animalArray;
     for (var i = 1; i <= animalObjAry.length; i++) {
         var newLi = $("<li>");
@@ -401,13 +391,12 @@ function iNatAPI(trip) {
             };
             // Adding the list of animals to the array of objects in the trip object
             trip.animalArray.push(animalObj);
-            console.log(trip);
         }
         // pushing animal list to firebase
         pushAnimalList(trip);
         populateAnimalList(trip);
     });
 }
-$("#btn-refresh").on("click", function() {
+$("#btn-refresh").on("click", function () {
     window.location.reload();
 });
