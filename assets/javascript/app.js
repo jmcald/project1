@@ -221,7 +221,7 @@ $(document).ready(function () {
             var sv = snapshot.val();
             console.log("from trip", sv);
             createParkInfoDiv(sv);
-            leafletAPICall(sv);
+            mapReset(sv);
             populateAnimalList(sv);
         });
     });
@@ -277,6 +277,15 @@ function leafletAPICall(obj) {
         });
     });
 }
+// This function was added to help reset the map
+function mapReset(a) {
+    $("#mapid").remove();
+    console.log("remove");
+    var newMap = $("<div>");
+    newMap.attr("id", "mapid");
+    $("#left-content").append(newMap);
+    leafletAPICall(a);
+}
 
 // jQuery plugin for the date range found here "http://www.daterangepicker.com/"
 $(function () {
@@ -289,6 +298,7 @@ $(function () {
 });
 // Fills in the destination dropdrown menu with the array above.
 function fillDestinationDropDown(arr) {
+    $("#park-dropdown").empty();
     for (var i = 0; i < arr.length; i++) {
         var newAnchor = $("<a>");
         newAnchor.attr("parkID", arr[i].parkID).attr("park-name", arr[i].name).addClass("dropdown-item park-item").text(arr[i].name);
