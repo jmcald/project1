@@ -189,6 +189,8 @@ var destinationArr = [
         name: "Zion National Park"
     }
 ];
+
+// An array for saving each trip's information
 var trip = {
     tripName: "",
     startDate: "",
@@ -197,6 +199,7 @@ var trip = {
     animalArray: [{}],
 };
 
+// The key function; It fills the dropdown menus and handles the on-click functions
 $(document).ready(function () {
     fillDestinationDropDown(destinationArr);
     fillTripDropDown();
@@ -221,7 +224,7 @@ $(document).ready(function () {
             var sv = snapshot.val();
             console.log("from trip", sv);
             createParkInfoDiv(sv);
-            leafletAPICall(sv);
+            mapReset(sv);
             populateAnimalList(sv);
         });
     });
@@ -230,12 +233,11 @@ $(document).ready(function () {
         trip.destination = $(this).attr("park-name");
         console.log(trip.destination);
         createParkInfoDiv(trip);
-        leafletAPICall(trip);
+        mapReset(trip);
 
     });
 });
 
-//I added a space so users can see their selection after they choose their destination; we can definately move/remove it
 function createParkInfoDiv(obj) {
     $("#alert-div").empty();
     console.log("in create park fun")
@@ -245,8 +247,8 @@ function createParkInfoDiv(obj) {
     $("#alert-div").append(selectedDestination);
 }
 
+// This function handles the API call to Google Places API; this takes the saved obj.destination and hands it to the API twice in order to get coordinates. The coordinates are then put into a Leaflet.js map.
 function leafletAPICall(obj) {
-    //I want the "selected destination" to be the input in the ajax call, but i can't get it to work yet, so currently "searchTerm" is set to equal "Yellowstone National Park"
     console.log("in leaflet api all", obj);
     var searchTerm = obj.destination;
 
@@ -257,9 +259,6 @@ function leafletAPICall(obj) {
         method: "GET"
     }).then(function (response) {
         var placeID = response.candidates[0].place_id;
-        console.log("first ajax");
-        console.log(response);
-        console.log(placeID);
         var geocodeQueryURL = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + "&key=AIzaSyBqMbrp7nyyZwf4tnkr-c0DX00748BZFEk"
         $.ajax({
             url: geocodeQueryURL,
@@ -267,8 +266,9 @@ function leafletAPICall(obj) {
         }).then(function (response) {
             var latitude = response.result.geometry.location.lat;
             var longitude = response.result.geometry.location.lng;
-            console.log("nested ajax")
-            var myMap = L.map('mapid').setView([latitude, longitude], 10);
+            console.log(latitude);
+            console.log(longitude);
+            var myMap = L.map('mapid', {scrollWheelZoom: false}).setView([latitude, longitude], 10);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(myMap);
@@ -276,6 +276,16 @@ function leafletAPICall(obj) {
             L.marker([latitude, longitude]).addTo(myMap);
         });
     });
+}
+
+// This function was added to help reset the map
+function mapReset(a) {
+    $("#mapid").remove();
+    console.log("remove");
+    var newMap = $("<div>");
+    newMap.attr("id", "mapid");
+    $("#left-content").append(newMap);
+    leafletAPICall(a);
 }
 
 // jQuery plugin for the date range found here "http://www.daterangepicker.com/"
