@@ -25,11 +25,11 @@ Usage
 
     There are three important pieces of input. All three are required fields to process a query:
 
-    1. Trip Name: A trip name must be chosen not only to help the user identify the query, but as an identifing signature when the trip query is saved. A simple text input.
+        1. Trip Name: A trip name must be chosen not only to help the user identify the query, but as an identifing signature when the trip query is saved. A simple text input.
 
-    2. Date Parameters: A trip's starting and ending date must be chosen through a dropdown calender. To select the date range, the dropdown menu is clicked, the first day of the trip is then clicked, and then the last day of the trip is clicked. For the date range to be registered, the "apply" button must be selected. To clear the selected dates, the "cancel" button can be selected. 
+        2. Date Parameters: A trip's starting and ending date must be chosen through a dropdown calender. To select the date range, the dropdown menu is clicked, the first day of the trip is then clicked, and then the last day of the trip is clicked. For the date range to be registered, the "apply" button must be selected. To clear the selected dates, the "cancel" button can be selected. 
 
-    3.Location: A location for the trip must be chosen from the options on the second dropdown menu. Currently only National Parks are avalible. The dropdown is clicked and the park is chosen from the list. When selected, the name of the park is displayed along with a map of the park.
+        3.Location: A location for the trip must be chosen from the options on the second dropdown menu. Currently only National Parks are avalible. The dropdown is clicked and the park is chosen from the list. When selected, the name of the park is displayed along with a map of the park.
     
     Once all three inputs are selected, the "Submit" button must be pressed in order to process the request. Until the Submit button is pressed, any of the three search parameters may be changed.
 
@@ -37,9 +37,9 @@ Usage
 
     The page also has two other functionalities:
 
-    The entire page can be cleared with a "new search" button. This does not clear the saved trips.
+        The entire page can be cleared with a "new search" button. This does not clear the saved trips.
 
-    Under the "My Trips" dropdown, the results from any previous trip can be recalled, including the map display.
+        Under the "My Trips" dropdown, the results from any previous trip can be recalled, including the map display.
 
     Built With
 
@@ -47,7 +47,7 @@ Usage
 
         CSS
 
-            Boostrap
+            Bootstrap
 
             daterangepicker.css
 
