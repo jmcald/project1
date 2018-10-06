@@ -1,4 +1,4 @@
-American Safari National Park Animal Index Application
+American Safari: National Park Animal Index Application
 
 This app was created to help with planning camping, hiking, sightseeing trips, etc. specifcally in relation to native animal species the user might see along the way. There are three input fields to help specify the query, and two main displays of information. This app also retains the ability to save queries for later reference.
 
@@ -12,7 +12,7 @@ Getting Started
 
     https://github.com/RJFreeman77/project1
 
-    ![Alt text](/assets/images/refreshimage.png?raw=true "Optional Title")
+    ![basicpage](/assets/images/refreshimage.png "Basic page image")
 
 Usage
 
