@@ -17,7 +17,7 @@ Getting Started
 
     All you need to access the page is the url link:
 
-    https://github.com/RJFreeman77/project1
+    https://github.com/jmcald/project1
 
     ![basicpage](/assets/images/refreshimage.png "Basic page image")
 
